@@ -8,7 +8,7 @@ public class TrgArea {
     }
 
     public static void main(String[] args) {
-        double square = TrgArea.area(2, 2, 2);
-        System.out.println("triangle's square equals " + square);
+        double trSquare = TrgArea.area(2, 2, 2);
+        System.out.println("triangle's square equals " + trSquare);
     }
 }

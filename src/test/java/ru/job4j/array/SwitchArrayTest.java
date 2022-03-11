@@ -8,13 +8,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class SwitchArrayTest {
 
     @Test
-    @DisplayName("Test swap method when 0 to 3")
+    @DisplayName("Test swap method when 0 to 2")
     public void whenSwap0to3() {
         int[] input = {1, 2, 3, 4};
         int source = 0;
-        int dest = input.length - 1;
+        int dest = 2;
         int[] result = SwitchArray.swap(input, source, dest);
-        int[] expected = {4, 2, 3, 1};
+        int[] expected = {3, 2, 1, 4};
         assertArrayEquals(expected, result);
     }
 

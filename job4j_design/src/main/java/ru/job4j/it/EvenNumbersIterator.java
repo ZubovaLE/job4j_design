@@ -1,5 +1,6 @@
 package ru.job4j.it;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -13,14 +14,9 @@ public class EvenNumbersIterator implements Iterator<Integer> {
 
     @Override
     public boolean hasNext() {
-        boolean result = false;
-        for (int i = index; i < data.length; i++) {
-            if (data[i] % 2 == 0) {
-                result = true;
-                break;
-            }
-        }
-        return result;
+        return Arrays.stream(data)
+                .skip(index)
+                .filter(d -> d % 2 == 0).count() != 0;
     }
 
     @Override

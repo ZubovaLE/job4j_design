@@ -1,6 +1,4 @@
-package ru.job4j.generic.generic;
-
-import ru.job4j.generic.Store;
+package ru.job4j.generic;
 
 public class RoleStore implements Store<Role> {
     private final Store<Role> storeOfRoles = new MemStore<>();

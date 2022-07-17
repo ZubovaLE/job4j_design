@@ -1,7 +1,5 @@
 package ru.job4j.generic;
 
-import ru.job4j.generic.generic.Base;
-
 public interface Store<T extends Base> {
     void add(T model);
 

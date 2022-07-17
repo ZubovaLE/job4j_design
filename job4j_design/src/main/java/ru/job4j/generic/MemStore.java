@@ -1,6 +1,4 @@
-package ru.job4j.generic.generic;
-
-import ru.job4j.generic.Store;
+package ru.job4j.generic;
 
 import java.util.HashMap;
 import java.util.Map;

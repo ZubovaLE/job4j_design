@@ -1,8 +1,10 @@
-package ru.job4j.generic.generic;
+package ru.job4j.generic;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import ru.job4j.generic.Role;
+import ru.job4j.generic.RoleStore;
 
 import static org.junit.jupiter.api.Assertions.*;
 

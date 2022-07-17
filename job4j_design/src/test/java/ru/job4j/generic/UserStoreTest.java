@@ -1,7 +1,9 @@
-package ru.job4j.generic.generic;
+package ru.job4j.generic;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import ru.job4j.generic.User;
+import ru.job4j.generic.UserStore;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

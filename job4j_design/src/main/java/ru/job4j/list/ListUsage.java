@@ -1,7 +1,6 @@
 package ru.job4j.list;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.function.Predicate;
@@ -71,7 +70,7 @@ public class ListUsage<T> {
 
     public void removeElement(int position) {
         if (position < list.size() && position >= 0) {
-            System.out.println("The element  " + list.remove(position) + " was successfully deleted");
+            System.out.println("The element " + list.remove(position) + " was successfully deleted");
         }
     }
 
@@ -101,6 +100,13 @@ public class ListUsage<T> {
 
     public int returnSize() {
         return list.size();
+    }
+
+    public List<T> returnSubList(int from, int to) {
+        if (from > to || from < 0 || to > list.size()) {
+            throw new IndexOutOfBoundsException();
+        }
+        return list.subList(from, to);
     }
 
     public static void main(String[] args) {

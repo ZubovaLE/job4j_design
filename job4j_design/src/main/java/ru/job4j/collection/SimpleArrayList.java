@@ -6,7 +6,7 @@ import java.util.*;
 
 public class SimpleArrayList<T> implements List<T> {
     private T[] container;
-    private int size = 0;
+    private int size;
     private int modCount;
     private int point = 0;
 
@@ -17,32 +17,39 @@ public class SimpleArrayList<T> implements List<T> {
     @Override
     public void add(T value) {
         if (size == container.length) {
-            container = Arrays.copyOf(container, container.length * 2);
+            container = grow();
         }
         container[size++] = value;
         modCount++;
     }
 
+    private T[] grow() {
+        return Arrays.copyOf(container, container.length * 2);
+    }
+
     @Override
     public T set(int index, T newValue) {
-        T obj = container[Objects.checkIndex(index, container.length)];
+        Objects.checkIndex(index, container.length);
+        T oldValue = container[index];
         container[index] = newValue;
-        return obj;
+        return oldValue;
     }
 
     @Override
     public T remove(int index) {
-        T obj = container[Objects.checkIndex(index, container.length)];
+        Objects.checkIndex(index, container.length);
+        T deletedValue = container[index];
         System.arraycopy(container, index + 1, container, index, container.length - index - 1);
         container[container.length - 1] = null;
         size--;
         modCount++;
-        return obj;
+        return deletedValue;
     }
 
     @Override
     public T get(int index) {
-        return container[Objects.checkIndex(index, container.length)];
+        Objects.checkIndex(index, container.length);
+        return container[index];
     }
 
     @Override

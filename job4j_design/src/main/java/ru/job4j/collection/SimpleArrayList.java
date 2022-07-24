@@ -8,7 +8,10 @@ public class SimpleArrayList<T> implements List<T> {
     private T[] container;
     private int size;
     private int modCount;
-    private int point = 0;
+
+    public SimpleArrayList() {
+        this.container = (T[]) new Object[10];
+    }
 
     public SimpleArrayList(int capacity) {
         this.container = (T[]) new Object[capacity];
@@ -29,7 +32,7 @@ public class SimpleArrayList<T> implements List<T> {
 
     @Override
     public T set(int index, T newValue) {
-        Objects.checkIndex(index, container.length);
+        Objects.checkIndex(index, size);
         T oldValue = container[index];
         container[index] = newValue;
         return oldValue;
@@ -37,10 +40,10 @@ public class SimpleArrayList<T> implements List<T> {
 
     @Override
     public T remove(int index) {
-        Objects.checkIndex(index, container.length);
+        Objects.checkIndex(index, size);
         T deletedValue = container[index];
-        System.arraycopy(container, index + 1, container, index, container.length - index - 1);
-        container[container.length - 1] = null;
+        System.arraycopy(container, index + 1, container, index, size - index - 1);
+        container[size - 1] = null;
         size--;
         modCount++;
         return deletedValue;
@@ -48,7 +51,7 @@ public class SimpleArrayList<T> implements List<T> {
 
     @Override
     public T get(int index) {
-        Objects.checkIndex(index, container.length);
+        Objects.checkIndex(index, size);
         return container[index];
     }
 
@@ -61,6 +64,7 @@ public class SimpleArrayList<T> implements List<T> {
     public Iterator<T> iterator() {
         final int expectedModCount = modCount;
         return new Iterator<>() {
+            int point = 0;
 
             @Override
             public boolean hasNext() {

@@ -75,10 +75,10 @@ public class SimpleLinkedList<E> implements List<E> {
                 if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException();
                 }
-                Node<E> value = pointer;
+                E value = pointer.item;
                 pointer = pointer.next;
                 point++;
-                return value.item;
+                return value;
             }
         };
     }

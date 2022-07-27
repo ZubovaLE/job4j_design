@@ -21,6 +21,28 @@ class ForwardLinkedTest {
     }
 
     @Test
+    @DisplayName("Call an iterator when add 1 and addFirst 0 then get elements")
+    public void whenAddAndAddFirstThenGetElementsByCallingIterator() {
+        ForwardLinked<Integer> linked = new ForwardLinked<>();
+        linked.add(1);
+        linked.addFirst(0);
+        Iterator<Integer> it = linked.iterator();
+        assertThat(it.next()).isEqualTo(0);
+        assertThat(it.next()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("Call an iterator when call addFirst twice then get elements")
+    public void whenEmptyListAndAddFirstTwiceThenGetElementsByCallingIterator() {
+        ForwardLinked<Integer> linked = new ForwardLinked<>();
+        linked.addFirst(1);
+        linked.addFirst(0);
+        Iterator<Integer> it = linked.iterator();
+        assertThat(it.next()).isEqualTo(0);
+        assertThat(it.next()).isEqualTo(1);
+    }
+
+    @Test
     @DisplayName("DeleteFirst when no elements then get NoSuchElementException")
     public void whenDeleteEmptyLinked() {
         ForwardLinked<Integer> linked = new ForwardLinked<>();
@@ -60,6 +82,16 @@ class ForwardLinkedTest {
         linked.add(2);
         Iterator<Integer> it = linked.iterator();
         assertThat(linked.deleteFirst()).isEqualTo(1);
+        assertThatExceptionOfType(ConcurrentModificationException.class).isThrownBy(it::next);
+    }
+
+    @Test
+    @DisplayName("Call AddFirst after calling an iterator then get ConcurrentModificationException")
+    public void whenCallIteratorAndAddFirstThenGetConcurrentModificationException() {
+        ForwardLinked<Integer> linked = new ForwardLinked<>();
+        linked.add(1);
+        Iterator<Integer> it = linked.iterator();
+        linked.addFirst(0);
         assertThatExceptionOfType(ConcurrentModificationException.class).isThrownBy(it::next);
     }
 

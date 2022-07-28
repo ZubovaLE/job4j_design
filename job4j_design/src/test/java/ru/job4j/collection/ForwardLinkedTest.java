@@ -111,4 +111,31 @@ class ForwardLinkedTest {
         Iterator<Integer> it = linked.iterator();
         assertThat(it.hasNext()).isFalse();
     }
+
+    @Test
+    @DisplayName("When add and revert then call iterator to get elements")
+    public void whenAddAndRevertThenIter() {
+        ForwardLinked<Integer> linked = new ForwardLinked<>();
+        linked.add(1);
+        linked.add(2);
+        linked.revert();
+        Iterator<Integer> it = linked.iterator();
+        assertThat(it.next()).isEqualTo(2);
+        assertThat(it.next()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("When no elements then .revert returns false")
+    public void whenSize0ThenReturnFalse() {
+        ForwardLinked<Integer> emptyList = new ForwardLinked<>();
+        assertThat(emptyList.revert()).isFalse();
+    }
+
+    @Test
+    @DisplayName("When only one element then .revert returns false")
+    public void whenSize1ThenReturnFalse() {
+        ForwardLinked<Integer> singleList = new ForwardLinked<>();
+        singleList.add(1);
+        assertThat(singleList.revert()).isFalse();
+    }
 }

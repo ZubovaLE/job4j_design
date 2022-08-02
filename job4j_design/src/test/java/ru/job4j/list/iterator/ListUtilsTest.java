@@ -14,7 +14,7 @@ class ListUtilsTest {
 
     @Test
     @DisplayName("AddBefore when valid index then the list is changed")
-    public void addBeforeWhenValidIndex() {
+    void addBeforeWhenValidIndex() {
         List<Integer> input = new ArrayList<>(Arrays.asList(1, 3));
         ListUtils.addBefore(input, 1, 2);
         assertThat(input).isEqualTo(Arrays.asList(1, 2, 3));
@@ -22,14 +22,14 @@ class ListUtilsTest {
 
     @Test
     @DisplayName("AddBefore when invalid index then get IndexOutOfBoundsException")
-    public void addBeforeWhenInvalidIndexThenIndexOutOfBoundsException() {
+    void addBeforeWhenInvalidIndexThenIndexOutOfBoundsException() {
         List<Integer> input = new ArrayList<>(Arrays.asList(1, 3));
         assertThatIndexOutOfBoundsException().isThrownBy(() -> ListUtils.addBefore(input, 3, 2));
     }
 
     @Test
     @DisplayName("AddBefore when null elements then the method works correctly")
-    public void addBeforeWhenNullElements() {
+    void addBeforeWhenNullElements() {
         List<Integer> input = new ArrayList<>(Arrays.asList(0, 1, 2));
         ListUtils.addBefore(input, 1, null);
         ListUtils.addBefore(input, 1, null);
@@ -38,14 +38,14 @@ class ListUtilsTest {
 
     @Test
     @DisplayName("AddBefore when empty list then get IndexOutOfBoundsException")
-    public void addBeforeWhenEmptyListThenIndexOutOfBoundsException() {
+    void addBeforeWhenEmptyListThenIndexOutOfBoundsException() {
         List<Integer> input = new ArrayList<>();
         assertThatIndexOutOfBoundsException().isThrownBy(() -> ListUtils.addBefore(input, 0, 1));
     }
 
     @Test
     @DisplayName("AddAfter when the last element")
-    public void whenAddAfterLast() {
+    void whenAddAfterLast() {
         List<Integer> input = new ArrayList<>(Arrays.asList(0, 1, 2));
         ListUtils.addAfter(input, 2, 3);
         assertThat(input).isEqualTo(Arrays.asList(0, 1, 2, 3));
@@ -53,7 +53,7 @@ class ListUtilsTest {
 
     @Test
     @DisplayName("AddAfter when null elements then the method works correctly")
-    public void addAfterWhenNullElements() {
+    void addAfterWhenNullElements() {
         List<Integer> input = new ArrayList<>(Arrays.asList(0, 1, 2));
         ListUtils.addAfter(input, 1, null);
         ListUtils.addAfter(input, 1, null);
@@ -62,14 +62,14 @@ class ListUtilsTest {
 
     @Test
     @DisplayName("AddAfter when empty list then get IndexOutOfBoundsException")
-    public void addAfterWhenEmptyListThenIndexOutOfBoundsException() {
+    void addAfterWhenEmptyListThenIndexOutOfBoundsException() {
         List<Integer> input = new ArrayList<>();
         assertThatIndexOutOfBoundsException().isThrownBy(() -> ListUtils.addAfter(input, 0, 1));
     }
 
     @Test
     @DisplayName("Test removeIf")
-    public void removeIf() {
+    void removeIf() {
         List<Integer> input = new ArrayList<>(Arrays.asList(0, 1, 2, 3));
         Predicate<Integer> filter = s -> s > 1;
         ListUtils.removeIf(input, filter);
@@ -79,7 +79,7 @@ class ListUtilsTest {
 
     @Test
     @DisplayName("Test removeIf when null predicate then get NullPointerException")
-    public void removeIfWhenNullPredicate() {
+    void removeIfWhenNullPredicate() {
         List<Integer> input = new ArrayList<>(Arrays.asList(0, 1, 2, 3));
         Predicate<Integer> filter;
         filter = null;
@@ -88,7 +88,7 @@ class ListUtilsTest {
 
     @Test
     @DisplayName("Test replaceIf")
-    public void replaceIf() {
+    void replaceIf() {
         List<Integer> input = new ArrayList<>(Arrays.asList(0, 1, 2, 3));
         Predicate<Integer> filter = s -> s > 1;
         ListUtils.replaceIf(input, filter, -1);
@@ -98,7 +98,7 @@ class ListUtilsTest {
 
     @Test
     @DisplayName("Test replaceIf when null predicate then get NullPointerException")
-    public void replaceIfWhenNullPredicate() {
+    void replaceIfWhenNullPredicate() {
         List<Integer> input = new ArrayList<>(Arrays.asList(0, 1, 2, 3));
         Predicate<Integer> filter;
         filter = null;
@@ -107,7 +107,7 @@ class ListUtilsTest {
 
     @Test
     @DisplayName("Test removeAll")
-    public void whenRemoveAll() {
+    void whenRemoveAll() {
         List<Integer> input = new ArrayList<>(Arrays.asList(0, 1, 2, 3));
         List<Integer> elementsForRemoving = new ArrayList<>(Arrays.asList(2, 1));
         ListUtils.removeAll(input, elementsForRemoving);
@@ -116,8 +116,8 @@ class ListUtilsTest {
     }
 
     @Test
-    @DisplayName("Test removeAll when null elements then the method works correctly")
-    public void removeAllWhenNull() {
+    @DisplayName("RemoveAll when null elements then the method works correctly")
+    void removeAllWhenNull() {
         List<Integer> input = new ArrayList<>(Arrays.asList(0, null, null, 3));
         List<Integer> elementsForRemoving = new ArrayList<>(Arrays.asList(1, null));
         ListUtils.removeAll(input, elementsForRemoving);
@@ -126,8 +126,8 @@ class ListUtilsTest {
     }
 
     @Test
-    @DisplayName("Test removeAll when duplicates then the first of them will be deleted")
-    public void removeAllWhenDuplicates() {
+    @DisplayName("RemoveAll when duplicates then the first of them will be deleted")
+    void removeAllWhenDuplicates() {
         List<Integer> input = new ArrayList<>(Arrays.asList(0, 1, 1, 3));
         List<Integer> elementsForRemoving = new ArrayList<>(Arrays.asList(0, 1));
         ListUtils.removeAll(input, elementsForRemoving);
@@ -136,8 +136,8 @@ class ListUtilsTest {
     }
 
     @Test
-    @DisplayName("Test removeAll when duplicates in elements for removing")
-    public void removeAllWhenDuplicatesAmongElementsForRemoving() {
+    @DisplayName("RemoveAll when duplicates in elements for removing")
+    void removeAllWhenDuplicatesAmongElementsForRemoving() {
         List<Integer> input = new ArrayList<>(Arrays.asList(0, 1, 1, 3));
         List<Integer> elementsForRemoving = new ArrayList<>(Arrays.asList(1, 1));
         ListUtils.removeAll(input, elementsForRemoving);
@@ -146,8 +146,8 @@ class ListUtilsTest {
     }
 
     @Test
-    @DisplayName("Test removeAll when null collection")
-    public void removeAllWhenNullCollection() {
+    @DisplayName("RemoveAll when null collection then get NullPointerException")
+    void removeAllWhenNullCollection() {
         List<Integer> input = new ArrayList<>(Arrays.asList(0, 1));
         List<Integer> elementsForRemoving = null;
         assertThatNullPointerException().isThrownBy(() -> ListUtils.removeAll(input, elementsForRemoving));

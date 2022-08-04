@@ -9,26 +9,30 @@ public class SimpleMap<K, V> implements Map<K, V> {
     private int capacity = 8;
     private int count = 0;
     private int modCount = 0;
-    private MapEntry<K, V>[] table = new MapEntry[capacity];
+    private MapEntry<K, V>[] table = (MapEntry<K, V>[]) new MapEntry[capacity];
 
     @Override
     public boolean put(K key, V value) {
+        boolean result = false;
         if (count >= LOAD_FACTOR * capacity) {
             expand();
         }
-        boolean result = false;
         if (key != null) {
-            table[indexFor(hash(key.hashCode()))] = new MapEntry<>(key, value);
-            result = true;
-            count++;
-            modCount++;
+            int index = indexFor(hash(key.hashCode()));
+            if (table[index] == null) {
+                table[index] = new MapEntry<>(key, value);
+                count++;
+                modCount++;
+                result = true;
+            } else {
+                replace(key, value);
+            }
         }
         return result;
     }
 
     private int hash(int hashCode) {
-        int h = ((Integer) hashCode).hashCode();
-        return h ^ h >>> capacity;
+        return hashCode ^ (hashCode >>> 16);
     }
 
     private int indexFor(int hash) {
@@ -37,17 +41,26 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
     private void expand() {
         capacity = capacity << 1;
-        MapEntry<K, V>[] newTable = new MapEntry[capacity];
-        for (MapEntry<K, V> m : table) {
-            newTable[indexFor(hash(m.key.hashCode()))] = m;
+        MapEntry<K, V>[] oldTable = table;
+        table = (MapEntry<K, V>[]) new MapEntry[capacity];
+        count = 0;
+        modCount = 0;
+        for (MapEntry<K, V> m : oldTable) {
+            if (m != null) {
+                put(m.key, m.value);
+            }
         }
-        table = newTable;
+    }
+
+    private void replace(K key, V value) {
+        remove(key);
+        put(key, value);
     }
 
     @Override
     public V get(K key) {
         if (key != null && table[indexFor(hash(key.hashCode()))] != null) {
-                return table[indexFor(hash(key.hashCode()))].value;
+            return table[indexFor(hash(key.hashCode()))].value;
         }
         return null;
     }
@@ -55,11 +68,12 @@ public class SimpleMap<K, V> implements Map<K, V> {
     @Override
     public boolean remove(K key) {
         boolean result = false;
-        if (table[indexFor(hash(key.hashCode()))] != null) {
-            table[indexFor(hash(key.hashCode()))] = null;
-            result = true;
+        int index = indexFor(hash(key.hashCode()));
+        if (table[index] != null) {
+            table[index] = null;
             modCount++;
             count--;
+            result = true;
         }
         return result;
     }
@@ -68,11 +82,21 @@ public class SimpleMap<K, V> implements Map<K, V> {
     public Iterator<K> iterator() {
         return new Iterator<>() {
             final int expectedModCount = modCount;
-            int point = 1;
+            int point = 0;
 
             @Override
             public boolean hasNext() {
-                return point <= count;
+                boolean result = false;
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                for (int index = point; index < capacity; index++) {
+                    if (table[index] != null) {
+                        result = true;
+                        break;
+                    }
+                }
+                return result;
             }
 
             @Override
@@ -82,6 +106,13 @@ public class SimpleMap<K, V> implements Map<K, V> {
                 }
                 if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException();
+                }
+
+                while (point < capacity) {
+                    if (table[point] != null) {
+                        break;
+                    }
+                    point++;
                 }
                 return table[point++].key;
             }

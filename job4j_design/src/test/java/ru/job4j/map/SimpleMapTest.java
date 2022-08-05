@@ -15,12 +15,25 @@ class SimpleMapTest {
     @DisplayName("When put then get")
     void whenPutThenGet() {
         SimpleMap<Integer, String> map = new SimpleMap<>();
-        map.put(1, "one");
-        map.put(2, "two");
-        map.put(3, "three");
-        assertEquals(map.get(1), "one");
-        assertEquals(map.get(2), "two");
-        assertEquals(map.get(3), "three");
+        assertTrue(map.put(1, "one"));
+        assertTrue(map.put(2, "two"));
+        assertTrue(map.put(3, "three"));
+        assertEquals("one", map.get(1));
+        assertEquals("two", map.get(2));
+        assertEquals("three", map.get(3));
+    }
+
+    @Test
+    @DisplayName("Put when key is null then return false")
+    void putWhenKeyIsNullThenReturnFalse() {
+        SimpleMap<Integer, String> map = new SimpleMap<>();
+        assertTrue(map.put(1, "one"));
+        assertFalse(map.put(null, "two"));
+
+        Iterator<Integer> iterator = map.iterator();
+        assertTrue(iterator.hasNext());
+        iterator.next();
+        assertFalse(iterator.hasNext());
     }
 
     @Test
@@ -32,10 +45,10 @@ class SimpleMapTest {
     }
 
     @Test
-    @DisplayName("Get when empty map then return null")
-    void getWhenEmptyMapThenReturnNull() {
+    @DisplayName("Get when key is null then return null")
+    void getWhenKeyIsNullThenReturnNull() {
         SimpleMap<Integer, String> map = new SimpleMap<>();
-        assertNull(map.get(55));
+        assertNull(map.get(null));
     }
 
     @Test
@@ -44,9 +57,7 @@ class SimpleMapTest {
         SimpleMap<Integer, String> map = new SimpleMap<>();
         assertTrue(map.put(1, "one"));
         assertFalse(map.put(1, "another"));
-        assertTrue(map.put(2, "two"));
-        assertEquals( "another", map.get(1));
-        assertEquals("two",map.get(2));
+        assertEquals("another", map.get(1));
     }
 
     @Test
@@ -89,24 +100,41 @@ class SimpleMapTest {
         map.put(2, "two");
         Iterator<Integer> iterator = map.iterator();
         assertTrue(iterator.hasNext());
-        assertEquals( 1, iterator.next());
+        iterator.next();
         assertTrue(iterator.hasNext());
-        assertEquals(2, iterator.next());
+        iterator.next();
         assertFalse(iterator.hasNext());
     }
 
     @Test
-    @DisplayName("When remove then .get returns null")
-    void testRemove() {
+    @DisplayName("Remove when valid key then true and .get returns null")
+    void removeWhenValidKeyThenReturnTrue() {
         SimpleMap<Integer, String> map = new SimpleMap<>();
         map.put(1, "one");
         map.put(2, "two");
         assertTrue(map.remove(2));
         assertNull(map.get(2));
+
         Iterator<Integer> iterator = map.iterator();
         assertTrue(iterator.hasNext());
-        assertEquals(iterator.next(), 1);
+        iterator.next();
         assertFalse(iterator.hasNext());
+    }
+
+    @Test
+    @DisplayName("Remove when key is null then return false")
+    void removeWhenKeyIsNullThenReturnFalse() {
+        SimpleMap<Integer, String> map = new SimpleMap<>();
+        map.put(1, "one");
+        assertFalse(map.remove(null));
+    }
+
+    @Test
+    @DisplayName("Remove when invalid key then return false")
+    void removeWhenInvalidKeyThenReturnFalse() {
+        SimpleMap<Integer, String> map = new SimpleMap<>();
+        map.put(1, "one");
+        assertFalse(map.remove(null));
     }
 
     @Test

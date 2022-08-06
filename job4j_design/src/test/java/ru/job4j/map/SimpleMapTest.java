@@ -31,9 +31,9 @@ class SimpleMapTest {
         assertFalse(map.put(null, "two"));
 
         Iterator<Integer> iterator = map.iterator();
-        assertTrue(iterator.hasNext());
+        assertTrue(iterator::hasNext);
         iterator.next();
-        assertFalse(iterator.hasNext());
+        assertFalse(iterator::hasNext);
     }
 
     @Test
@@ -99,11 +99,11 @@ class SimpleMapTest {
         map.put(1, "one");
         map.put(2, "two");
         Iterator<Integer> iterator = map.iterator();
-        assertTrue(iterator.hasNext());
+        assertTrue(iterator::hasNext);
         iterator.next();
-        assertTrue(iterator.hasNext());
+        assertTrue(iterator::hasNext);
         iterator.next();
-        assertFalse(iterator.hasNext());
+        assertFalse(iterator::hasNext);
     }
 
     @Test
@@ -116,9 +116,9 @@ class SimpleMapTest {
         assertNull(map.get(2));
 
         Iterator<Integer> iterator = map.iterator();
-        assertTrue(iterator.hasNext());
+        assertTrue(iterator::hasNext);
         iterator.next();
-        assertFalse(iterator.hasNext());
+        assertFalse(iterator::hasNext);
     }
 
     @Test
@@ -163,7 +163,7 @@ class SimpleMapTest {
     void callNextWhenEmptyMapThenGetException() {
         SimpleMap<Integer, String> map = new SimpleMap<>();
         Iterator<Integer> iterator = map.iterator();
-        assertFalse(iterator.hasNext());
+        assertFalse(iterator::hasNext);
         assertThrows(NoSuchElementException.class, iterator::next);
     }
 
@@ -186,5 +186,31 @@ class SimpleMapTest {
         Iterator<Integer> iterator = map.iterator();
         assertTrue(map.remove(2));
         assertThrows(ConcurrentModificationException.class, iterator::hasNext);
+    }
+
+    @Test
+    @DisplayName("When get iterator twice then start from the beginning")
+    void whenGetIteratorTwiceThenStartFromTheBeginning() {
+        SimpleMap<Integer, String> map = new SimpleMap<>();
+        map.put(1, "one");
+        Iterator<Integer> firstIterator = map.iterator();
+        assertEquals(1, firstIterator.next());
+        assertFalse(firstIterator::hasNext);
+
+        firstIterator = map.iterator();
+        assertTrue(firstIterator::hasNext);
+        assertEquals(1, firstIterator.next());
+        assertFalse(firstIterator::hasNext);
+    }
+
+    @Test
+    @DisplayName("When call .next before hasNext")
+    void checkNext() {
+        SimpleMap<Integer, String> map = new SimpleMap<>();
+        map.put(1, "one");
+        Iterator<Integer> iterator = map.iterator();
+        iterator.next();
+        assertFalse(iterator::hasNext);
+        assertThrows(NoSuchElementException.class, iterator::next);
     }
 }

@@ -11,36 +11,37 @@ public class Users  {
         int children = 2;
         Calendar birth = new GregorianCalendar(1975, Calendar.JANUARY, 12);
 
+        Map<User, Object> mapOfUsers = new HashMap<>();
+
         User first = new User(name, children, birth);
         User second = new User(name, children, birth);
-        Map<User, Object> mapForUsers = new HashMap<>();
-        mapForUsers.put(first, new Object());
-        mapForUsers.put(second, new Object());
-        System.out.println(mapForUsers);
+        mapOfUsers.put(first, new Object());
+        mapOfUsers.put(second, new Object());
+        System.out.println(mapOfUsers);
 
-        UserWithHashCode firstWithHash = new UserWithHashCode(name, children, birth);
-        UserWithHashCode secondWithHash = new UserWithHashCode(name, children, birth);
-        Map<UserWithHashCode, Object> mapForUsersWithHashCOde = new HashMap<>();
-        mapForUsersWithHashCOde.put(firstWithHash, new Object());
-        mapForUsersWithHashCOde.put(secondWithHash, new Object());
+        first = new UserWithHashCode(name, children, birth);
+        second = new UserWithHashCode(name, children, birth);
+        mapOfUsers = new HashMap<>();
+        mapOfUsers.put(first, new Object());
+        mapOfUsers.put(second, new Object());
         System.out.println();
-        System.out.println(mapForUsersWithHashCOde);
+        System.out.println(mapOfUsers);
 
-        UserWithEquals firstWithEquals = new UserWithEquals(name, children, birth);
-        UserWithEquals secondWithEquals = new UserWithEquals(name, children, birth);
-        Map<UserWithEquals, Object> mapForUsersWithEquals = new HashMap<>();
-        mapForUsersWithEquals.put(firstWithEquals, new Object());
-        mapForUsersWithEquals.put(secondWithEquals, new Object());
+        first = new UserWithEquals(name, children, birth);
+        second = new UserWithEquals(name, children, birth);
+        mapOfUsers = new HashMap<>();
+        mapOfUsers.put(first, new Object());
+        mapOfUsers.put(second, new Object());
         System.out.println();
-        System.out.println(mapForUsersWithEquals);
+        System.out.println(mapOfUsers);
 
-        UserWithEqualsAndHashCode firstWithBothMethods = new UserWithEqualsAndHashCode(name, children, birth);
-        UserWithEqualsAndHashCode secondWithBothMethods = new UserWithEqualsAndHashCode(name, children, birth);
-        Map<UserWithEqualsAndHashCode, Object> mapForUsersWithBothMethods = new HashMap<>();
-        mapForUsersWithBothMethods.put(firstWithBothMethods, new Object());
-        mapForUsersWithBothMethods.put(secondWithBothMethods, new Object());
+        first = new UserWithEqualsAndHashCode(name, children, birth);
+        second = new UserWithEqualsAndHashCode(name, children, birth);
+        mapOfUsers = new HashMap<>();
+        mapOfUsers.put(first, new Object());
+        mapOfUsers.put(second, new Object());
         System.out.println();
-        System.out.println(mapForUsersWithBothMethods);
+        System.out.println(mapOfUsers);
     }
 
 }

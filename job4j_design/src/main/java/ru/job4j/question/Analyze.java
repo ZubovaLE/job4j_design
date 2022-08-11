@@ -4,22 +4,29 @@ import java.util.Set;
 
 public class Analyze {
     public static Info diff(Set<User> previous, Set<User> current) {
+        int added = 0;
         int changed = 0;
-        Info rsl = new Info(0, 0, 0);
-        int result = previous.size() - current.size();
-        if (result > 0) {
-            rsl.setDeleted(result);
-        } else if (result < 0) {
-            rsl.setAdded(Math.abs(result));
-        }
-        for (User p : previous) {
-            for (User c : current) {
-                if (p.getId() == c.getId() && !p.getName().equals(c.getName())) {
-                    changed++;
+        int deleted = 0;
+        if (!areEqual(previous, current)) {
+            int oldElements = 0;
+            for (User p : previous) {
+                for (User c : current) {
+                    if (p.equals(c)) {
+                        oldElements++;
+                        continue;
+                    }
+                    if (p.getId() == c.getId() && !p.getName().equals(c.getName())) {
+                        changed++;
+                    }
                 }
             }
+            deleted = previous.size() - oldElements - changed;
+            added = current.size() - oldElements - changed;
         }
-        rsl.setChanged(changed);
-        return rsl;
+        return new Info(added, changed, deleted);
+    }
+
+    private static boolean areEqual(Set<User> previous, Set<User> current) {
+        return previous.size() == current.size() && current.containsAll(previous);
     }
 }

@@ -15,19 +15,21 @@ public class ResultFile {
     public static String multiplicationTable() {
         String ln = System.lineSeparator();
         StringBuilder data = new StringBuilder();
+        int result;
         for (int i = 1; i <= 10; i++) {
             for (int j = 1; j <= 10; j++) {
-                data.append(i * j);
-                if (i * j < 10) {
+                result = i * j;
+                data.append(result);
+                if (result < 10) {
                     data.append(" ").append(" ");
                 } else {
                     data.append(" ");
                 }
                 if (j == 10) {
-                    data.append(ln);
+                    data.deleteCharAt(data.length() - 1).append(ln);
                 }
             }
         }
-        return data.toString();
+        return data.toString().trim();
     }
 }

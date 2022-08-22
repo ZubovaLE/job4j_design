@@ -2,28 +2,21 @@ package ru.job4j.tree;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class SimpleTreeTest {
-    @Test
-    @DisplayName("Call findBy when valid value then Optional is present")
-    void findByWhenValidValueThenOptionalIsPresent() {
+    @ParameterizedTest
+    @DisplayName("Test findBy for valid and invalid values")
+    @CsvSource(value = {"6, true", "7, false"})
+    void findBy(int value, boolean result) {
         Tree<Integer> tree = new SimpleTree<>(1);
         assertTrue(tree.add(1, 2));
-        assertTrue(tree.add(1, 3));
-        assertTrue(tree.add(1, 4));
-        assertTrue(tree.add(4, 5));
-        assertTrue(tree.add(5, 6));
-        assertTrue(tree.findBy(6).isPresent());
-    }
-
-    @Test
-    @DisplayName("Call findBy when invalid value then Optional is empty")
-    void findByWhenInvalidValueThenOptionalIsEmpty() {
-        Tree<Integer> tree = new SimpleTree<>(1);
-        assertTrue(tree.add(1, 2));
-        assertFalse(tree.findBy(7).isPresent());
+        assertTrue(tree.add(2, 3));
+        assertTrue(tree.add(1, 6));
+        assertEquals(result, tree.findBy(value).isPresent());
     }
 
     @Test
@@ -43,27 +36,16 @@ class SimpleTreeTest {
         assertFalse(tree.add(2, 6));
     }
 
-    @Test
-    @DisplayName("IsBinary when the leaf is not binary then false")
-    void whenIsNotBinary() {
+    @ParameterizedTest
+    @DisplayName("Check if a tree is binary")
+    @CsvSource(value = {"1, 6, false", "3, 6, true"})
+    void isBinary(int parent, int child, boolean result) {
         SimpleTree<Integer> tree = new SimpleTree<>(1);
         assertTrue(tree.add(1, 2));
         assertTrue(tree.add(1, 3));
         assertTrue(tree.add(2, 4));
         assertTrue(tree.add(2, 5));
-        assertTrue(tree.add(1, 6));
-        assertFalse(tree.isBinary());
-    }
-
-    @Test
-    @DisplayName("IsBinary when the leaf is binary then true")
-    void whenIsBinary() {
-        SimpleTree<Integer> tree = new SimpleTree<>(1);
-        assertTrue(tree.add(1, 2));
-        assertTrue(tree.add(1, 3));
-        assertTrue(tree.add(2, 4));
-        assertTrue(tree.add(2, 7));
-        assertTrue(tree.add(3, 5));
-        assertTrue(tree.isBinary());
+        assertTrue(tree.add(parent, child));
+        assertEquals(result, tree.isBinary());
     }
 }

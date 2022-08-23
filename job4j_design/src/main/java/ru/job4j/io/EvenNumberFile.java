@@ -6,7 +6,6 @@ public class EvenNumberFile {
     public static void main(String[] args) {
         try (FileInputStream in = new FileInputStream("even.txt")) {
             StringBuilder numbers = new StringBuilder();
-            StringBuilder evenNumbers = new StringBuilder();
             int read;
             while ((read = in.read()) != -1) {
                 numbers.append((char) read);

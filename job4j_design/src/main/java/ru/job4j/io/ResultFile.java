@@ -19,16 +19,9 @@ public class ResultFile {
         for (int i = 1; i <= 10; i++) {
             for (int j = 1; j <= 10; j++) {
                 result = i * j;
-                data.append(result);
-                if (result < 10) {
-                    data.append(" ").append(" ");
-                } else {
-                    data.append(" ");
-                }
-                if (j == 10) {
-                    data.deleteCharAt(data.length() - 1).append(ln);
-                }
+                data.append(result).append(result < 10 ? "  " : " ");
             }
+            data.deleteCharAt(data.length() - 1).append(ln);
         }
         return data.toString().trim();
     }

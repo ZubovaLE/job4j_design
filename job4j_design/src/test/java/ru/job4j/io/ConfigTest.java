@@ -16,4 +16,15 @@ class ConfigTest {
         assertEquals("username", config.value("hibernate.connection.username"));
         assertNull(config.value("user"));
     }
+
+    @Test
+    @DisplayName("When pairs with comments and empty lines")
+    public void whenPairWithCommentsAndEmptyLines() {
+        String path = "./data/pair_with_comments_and_empty_lines.properties";
+        Config config = new Config(path);
+        config.load();
+        assertEquals("one", config.value("1"));
+        assertEquals("username", config.value("hibernate.connection.username"));
+        assertNull(config.value("3"));
+    }
 }

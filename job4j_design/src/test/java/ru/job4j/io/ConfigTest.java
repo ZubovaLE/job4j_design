@@ -27,4 +27,13 @@ class ConfigTest {
         assertEquals("username", config.value("hibernate.connection.username"));
         assertNull(config.value("3"));
     }
+
+    @Test
+    @DisplayName("When pairs with broken patterns then IllegalArgumentException")
+    public void whenPairWithBrokenPatternThenIllegalArgumentException() {
+        String path = "./data/pair_with_broken_pattern.properties";
+        Config config = new Config(path);
+        assertThrows(IllegalArgumentException.class, config:: load);
+        assertEquals("one", config.value("1"));
+    }
 }

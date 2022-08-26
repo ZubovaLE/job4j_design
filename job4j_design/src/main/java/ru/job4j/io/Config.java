@@ -17,8 +17,18 @@ public class Config {
 
     public void load() {
         try (BufferedReader read = new BufferedReader(new FileReader(this.path))) {
-            read.lines().filter(s -> !s.contains("#") && !s.isBlank())
-                    .forEach(s -> values.put(s.split("=")[0], s.split("=")[1]));
+            String line;
+            String[] keysAndValues;
+            while (read.ready()) {
+                line = read.readLine();
+                if (!line.isBlank() && (!line.contains("=") || line.split("=").length != 2)) {
+                    throw new IllegalArgumentException();
+                } else if (!line.isBlank() && !line.contains("#")) {
+                    keysAndValues = line.split("=");
+                    values.put(keysAndValues[0], keysAndValues[1]);
+                }
+
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

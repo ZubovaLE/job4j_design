@@ -6,15 +6,14 @@ import java.util.List;
 
 public class LogFilter {
     public static List<String> filter(String file) {
-        String[] words;
         List<String> lines = new ArrayList<>();
         try (BufferedReader buffer = new BufferedReader(new FileReader(file))) {
-            for (String line = buffer.readLine(); line != null; line = buffer.readLine()) {
-                words = line.split(" ");
-                if (words[words.length - 2].equals("404")) {
-                    lines.add(line);
-                }
-            }
+            buffer.lines()
+                    .filter(line -> {
+                        String[] words = line.split(" ");
+                        return words[words.length - 2].equals("404");
+                    })
+                    .forEach(lines::add);
         } catch (Exception e) {
             e.printStackTrace();
         }

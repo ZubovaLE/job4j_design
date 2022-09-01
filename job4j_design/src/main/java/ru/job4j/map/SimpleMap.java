@@ -13,14 +13,14 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
     @Override
     public boolean put(K key, V value) {
-        if (key == null) {
-            return false;
-        }
         boolean result = false;
+        int index = 0;
         if (count >= LOAD_FACTOR * capacity) {
             expand();
         }
-        int index = indexFor(hash(key.hashCode()));
+        if (key != null) {
+            index = indexFor(hash(key.hashCode()));
+        }
         if (table[index] == null) {
             table[index] = new MapEntry<>(key, value);
             count++;
@@ -54,28 +54,26 @@ public class SimpleMap<K, V> implements Map<K, V> {
     }
 
     private void replace(K key, V value) {
-        if (key != null) {
             remove(key);
             put(key, value);
-        }
     }
 
     @Override
     public V get(K key) {
-        if (key == null) {
-            return null;
+        int index = 0;
+        if (key != null) {
+            index = indexFor(hash(key.hashCode()));
         }
-        int index = indexFor(hash(key.hashCode()));
         return table[index] != null ? table[index].value : null;
     }
 
     @Override
     public boolean remove(K key) {
         boolean result = false;
-        if (key == null) {
-            return false;
+        int index = 0;
+        if (key != null) {
+            index = indexFor(hash(key.hashCode()));
         }
-        int index = indexFor(hash(key.hashCode()));
         if (table[index] != null) {
             table[index] = null;
             modCount++;

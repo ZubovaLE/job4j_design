@@ -2,6 +2,8 @@ package ru.job4j.map;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
@@ -10,30 +12,13 @@ import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SimpleMapTest {
-
-    @Test
+    @ParameterizedTest
+    @CsvSource(value = {"1, one", "null, zero"}, nullValues = "null")
     @DisplayName("When put then get")
-    void whenPutThenGet() {
+    void whenPutThenGet(Integer key, String value) {
         SimpleMap<Integer, String> map = new SimpleMap<>();
-        assertTrue(map.put(1, "one"));
-        assertTrue(map.put(2, "two"));
-        assertTrue(map.put(3, "three"));
-        assertEquals("one", map.get(1));
-        assertEquals("two", map.get(2));
-        assertEquals("three", map.get(3));
-    }
-
-    @Test
-    @DisplayName("Put when key is null then return false")
-    void putWhenKeyIsNullThenReturnFalse() {
-        SimpleMap<Integer, String> map = new SimpleMap<>();
-        assertTrue(map.put(1, "one"));
-        assertFalse(map.put(null, "two"));
-
-        Iterator<Integer> iterator = map.iterator();
-        assertTrue(iterator::hasNext);
-        iterator.next();
-        assertFalse(iterator::hasNext);
+        assertTrue(map.put(key, value));
+        assertEquals(value, map.get(key));
     }
 
     @Test
@@ -44,20 +29,14 @@ class SimpleMapTest {
         assertNull(map.get(55));
     }
 
-    @Test
-    @DisplayName("Get when key is null then return null")
-    void getWhenKeyIsNullThenReturnNull() {
-        SimpleMap<Integer, String> map = new SimpleMap<>();
-        assertNull(map.get(null));
-    }
-
-    @Test
+    @ParameterizedTest
+    @CsvSource(value = {"1, one, anotherOne", "null, zero, anotherZero"}, nullValues = "null")
     @DisplayName("Put when key already exists then false and replace its value")
-    void putWhenKeyExistsThenReplace() {
+    void putWhenExists(Integer key, String value, String anotherValue) {
         SimpleMap<Integer, String> map = new SimpleMap<>();
-        assertTrue(map.put(1, "one"));
-        assertFalse(map.put(1, "another"));
-        assertEquals("another", map.get(1));
+        assertTrue(map.put(key, value));
+        assertFalse(map.put(key, anotherValue));
+        assertEquals(anotherValue, map.get(key));
     }
 
     @Test
@@ -106,27 +85,14 @@ class SimpleMapTest {
         assertFalse(iterator::hasNext);
     }
 
-    @Test
+    @ParameterizedTest
+    @CsvSource(value = {"1, one", "null, zero"}, nullValues = "null")
     @DisplayName("Remove when valid key then true and .get returns null")
-    void removeWhenValidKeyThenReturnTrue() {
+    void removeWhenValidKeyThenReturnTrue(Integer key, String value) {
         SimpleMap<Integer, String> map = new SimpleMap<>();
-        map.put(1, "one");
-        map.put(2, "two");
-        assertTrue(map.remove(2));
-        assertNull(map.get(2));
-
-        Iterator<Integer> iterator = map.iterator();
-        assertTrue(iterator::hasNext);
-        iterator.next();
-        assertFalse(iterator::hasNext);
-    }
-
-    @Test
-    @DisplayName("Remove when key is null then return false")
-    void removeWhenKeyIsNullThenReturnFalse() {
-        SimpleMap<Integer, String> map = new SimpleMap<>();
-        map.put(1, "one");
-        assertFalse(map.remove(null));
+        map.put(key, value);
+        assertTrue(map.remove(key));
+        assertNull(map.get(key));
     }
 
     @Test

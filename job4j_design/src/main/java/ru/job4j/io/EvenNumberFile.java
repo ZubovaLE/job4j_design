@@ -12,8 +12,8 @@ public class EvenNumberFile {
             }
             String[] lines = numbers.toString().split(System.lineSeparator());
             for (String line : lines) {
-                if (!line.isBlank() && Integer.parseInt(line) % 2 == 0) {
-                    System.out.println(line);
+                if (!line.isBlank()) {
+                    System.out.printf("%s = %b%n", line, (Integer.parseInt(line) % 2 == 0));
                 }
             }
         } catch (Exception e) {

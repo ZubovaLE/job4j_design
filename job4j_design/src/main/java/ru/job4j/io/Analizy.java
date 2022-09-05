@@ -14,10 +14,11 @@ public class Analizy {
             while (line != null) {
                 if (!line.isBlank()) {
                     String[] data = line.split(" ");
-                    if (!unavailable && (data[0].equals("400") || data[0].equals("500"))) {
+                    String status = data[0];
+                    if (!unavailable && (status.equals("400") || status.equals("500"))) {
                         out.print(data[1]);
                         unavailable = true;
-                    } else if (unavailable && !(data[0].equals("400") || data[0].equals("500"))) {
+                    } else if (unavailable && !(status.equals("400") || status.equals("500"))) {
                         out.print(";" + data[1] + System.lineSeparator());
                         unavailable = false;
                     }

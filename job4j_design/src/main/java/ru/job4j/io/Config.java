@@ -1,5 +1,7 @@
 package ru.job4j.io;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -21,13 +23,15 @@ public class Config {
             String[] keysAndValues;
             while (read.ready()) {
                 line = read.readLine();
-                if (!line.isBlank() && (!line.contains("=") || line.split("=").length != 2)) {
-                    throw new IllegalArgumentException();
-                } else if (!line.isBlank() && !line.contains("#")) {
+                if (isBlank(line) || line.contains("#")) {
+                    continue;
+                }
+                if (line.split("=").length == 2) {
                     keysAndValues = line.split("=");
                     values.put(keysAndValues[0], keysAndValues[1]);
+                    continue;
                 }
-
+                throw new IllegalArgumentException();
             }
         } catch (IOException e) {
             e.printStackTrace();

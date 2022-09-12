@@ -1,5 +1,6 @@
 package ru.job4j.encoding;
 
+import static java.lang.Math.random;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.io.*;
@@ -20,25 +21,40 @@ public class ConsoleChat {
     }
 
     public void run() {
-        if (isNotBlank(path)) {
-            File file = new File(path);
-            List<String> phrases = new ArrayList<>();
-            StringBuilder log = new StringBuilder();
-            String ln = System.lineSeparator();
+        if (isNotBlank(path) && isNotBlank(botAnswers)) {
+            String hello = "Hello! Write something\n";
+            String firstRule = "If you want to stop my answers, write 'стоп'\n";
+            String secondRule = "If you want to continue my answers, write 'продолжить'\n";
+            String thirdRule = "If you want to stop this chat, write 'закончить'";
+            StringBuilder greeting = new StringBuilder();
+            System.out.println(greeting.append(hello).append(firstRule).append(secondRule).append(thirdRule));
+            List<String> log = new ArrayList<>();
+            log.add(greeting.toString());
+            List<String> answers = readPhrases();
+            String botAnswer = "";
             boolean botCanAnswer = true;
             try (BufferedReader readResponsesOfUser = new BufferedReader(new InputStreamReader(System.in))) {
-                log.append("Hello! Write something").append(ln)
-                        .append("If you want to stop my answers, write 'стоп'").append(ln)
-                        .append("If you want to continue my answers, write 'продолжить'").append(ln)
-                        .append("If you want to stop this chat, write 'стоп'").append(ln);
-                String responseOfUser = "";
-                while (!responseOfUser.equals(OUT)) {
+                String responseOfUser;
+                do {
                     responseOfUser = readResponsesOfUser.readLine();
-                    log.append(responseOfUser);
                     if (responseOfUser.equals(STOP)) {
                         botCanAnswer = false;
+                        log.add(responseOfUser);
+                        continue;
+                    } else if (responseOfUser.equals(CONTINUE)) {
+                        botCanAnswer = true;
+                        botAnswer = answers.get((int) (random() * (answers.size())));
+                        System.out.println(botAnswer);
+                    } else if (botCanAnswer && !responseOfUser.equals(OUT)) {
+                        botAnswer = answers.get((int) (random() * (answers.size())));
+                        System.out.println(botAnswer);
                     }
-                }
+                    log.add(responseOfUser);
+                    if (botCanAnswer && !responseOfUser.equals(OUT)) {
+                        log.add(botAnswer);
+                    }
+                } while (!responseOfUser.equals(OUT));
+                saveLog(log);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -46,15 +62,17 @@ public class ConsoleChat {
     }
 
     private List<String> readPhrases() {
+        List<String> answers = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(botAnswers, Charset.forName("WINDOWS-1251")))) {
-            return reader.lines().toList();
+            answers = reader.lines().toList();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return answers;
     }
 
     private void saveLog(List<String> log) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(path, Charset.forName("WINDOWS-1251"), true))) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(path, Charset.forName("WINDOWS-1251")))) {
             log.forEach(writer::println);
         } catch (IOException e) {
             e.printStackTrace();
@@ -62,7 +80,7 @@ public class ConsoleChat {
     }
 
     public static void main(String[] args) {
-        ConsoleChat chat = new ConsoleChat("", "botAnswers");
+        ConsoleChat chat = new ConsoleChat("./src/data/log.txt", "./src/data/botAnswers.txt");
         chat.run();
     }
 }

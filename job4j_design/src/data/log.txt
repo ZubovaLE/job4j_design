@@ -1,0 +1,19 @@
+Hello! Write something
+If you want to stop my answers, write 'стоп'
+If you want to continue my answers, write 'продолжить'
+If you want to stop this chat, write 'закончить'
+
+Hello!
+Good
+How it's going?
+Okay
+стоп
+Остановлены
+Всё ещё остановлены
+продолжить
+Oh
+Good?
+Good
+Super
+Okay
+закончить

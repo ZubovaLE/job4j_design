@@ -4,7 +4,8 @@ import java.io.*;
 import java.util.Scanner;
 
 public class ScannerUsage {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        String whiteSpace = " ";
         var ls = System.lineSeparator();
         var firstData = String.join(ls,
                 "1 2 3",
@@ -23,6 +24,18 @@ public class ScannerUsage {
                 .useDelimiter(", ");
         while (secondScanner.hasNext()) {
             System.out.println(secondScanner.next());
+        }
+
+        var thirdData = "A 1B FF 110";
+        var file = File.createTempFile("data", null);
+        try (BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
+            out.write(thirdData.getBytes());
+        }
+        try (var thirdScanner = new Scanner(file).useRadix(16)) {
+            while (thirdScanner.hasNextInt()) {
+                System.out.print(thirdScanner.nextInt());
+                System.out.print(whiteSpace);
+            }
         }
     }
 }

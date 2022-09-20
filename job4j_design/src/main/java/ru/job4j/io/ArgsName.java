@@ -13,11 +13,12 @@ public class ArgsName {
     }
 
     private void parse(String[] args) {
+        int position;
         for (String pair : args) {
             if (!isValid(pair)) {
                 throw new IllegalArgumentException();
             }
-            int position = pair.indexOf("=");
+            position = pair.indexOf("=");
             values.put(pair.substring(1, position), pair.substring(position + 1));
         }
     }

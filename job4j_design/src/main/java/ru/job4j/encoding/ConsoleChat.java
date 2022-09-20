@@ -1,6 +1,5 @@
 package ru.job4j.encoding;
 
-import static java.lang.Math.random;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.io.*;
@@ -39,19 +38,19 @@ public class ConsoleChat {
                     responseOfUser = readResponsesOfUser.readLine();
                     if (responseOfUser.equals(STOP)) {
                         botCanAnswer = false;
-                        log.add(responseOfUser);
+                        log.add("User: " + responseOfUser);
                         continue;
                     } else if (responseOfUser.equals(CONTINUE)) {
                         botCanAnswer = true;
-                        botAnswer = answers.get((int) (random() * (answers.size())));
+                        botAnswer = answers.get((int) (Math.random() * (answers.size())));
                         System.out.println(botAnswer);
                     } else if (botCanAnswer && !responseOfUser.equals(OUT)) {
-                        botAnswer = answers.get((int) (random() * (answers.size())));
+                        botAnswer = answers.get((int) (Math.random() * (answers.size())));
                         System.out.println(botAnswer);
                     }
-                    log.add(responseOfUser);
-                    if (botCanAnswer && !responseOfUser.equals(OUT)) {
-                        log.add(botAnswer);
+                    log.add("User: " + responseOfUser);
+                    if (canBeAdded(botCanAnswer, responseOfUser)) {
+                        log.add("Bot: " + botAnswer);
                     }
                 } while (!responseOfUser.equals(OUT));
                 saveLog(log);
@@ -59,6 +58,10 @@ public class ConsoleChat {
                 e.printStackTrace();
             }
         }
+    }
+
+    private boolean canBeAdded(boolean botCanAnswer, String responseOfUser) {
+        return botCanAnswer && !responseOfUser.equals(OUT);
     }
 
     private List<String> readPhrases() {

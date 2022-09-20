@@ -2,18 +2,18 @@ Hello! Write something
 If you want to stop my answers, write 'стоп'
 If you want to continue my answers, write 'продолжить'
 If you want to stop this chat, write 'закончить'
-
-Hello!
-Good
-How it's going?
-Okay
-стоп
-Остановлены
-Всё ещё остановлены
-продолжить
-Oh
-Good?
-Good
-Super
-Okay
-закончить
+User: Hello
+Bot: Nope
+User: How its going?
+Bot: great
+User: стоп
+User: good
+User: 
+User: остановка
+User: продолжить
+Bot: Nope
+User: Hoora
+Bot: I don't think so
+User: bye?
+Bot: Oh
+User: закончить

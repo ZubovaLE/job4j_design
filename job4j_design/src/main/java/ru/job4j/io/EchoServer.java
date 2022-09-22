@@ -16,20 +16,19 @@ public class EchoServer {
                      BufferedReader in = new BufferedReader(
                              new InputStreamReader(socket.getInputStream())
                      )) {
-                    String line;
+                    String line = in.readLine();
                     String answer = "I'm a simple server.";
-                    line = in.readLine();
+                    int position;
+                    String request;
                     while (!line.isEmpty()) {
                         System.out.println(line);
-                        if (line.contains("/?msg")) {
-                            String[] message = line.split(" ");
-                            String[] splitMsg = message[1].split("msg=", 2);
-                            String request = splitMsg[1];
+                        if (line.contains("/?msg=")) {
+                            position = line.indexOf("=");
+                            request = line.substring(position + 1, line.lastIndexOf(" "));
                             if (request.equals("Hello")) {
                                 answer = "Hello, dear friend";
                             } else if (request.equals("Exit")) {
-                                out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
-                                out.write("Server stopped".getBytes());
+                                answer = "Server stopped";
                                 server.close();
                                 break;
                             } else {

@@ -5,6 +5,8 @@ import ru.job4j.io.ArgsName;
 import java.io.*;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -21,25 +23,30 @@ public class CSVReader {
         String path = argsName.get(PATH);
         String delimiter = argsName.get(DELIMITER);
         String out = argsName.get(OUT);
-        String filter = argsName.get(FILTER);
+        String stringOfFilters = argsName.get(FILTER);
+
         String line;
         String outputInfo;
-        List<String> listOfFilters;
-        List<Integer> appropriateIndexes;
-        if (isValid(path, delimiter, out, filter)) {
-            Optional<List<String>> filters = getListOfFilters(filter);
+        List<String> listOfLineElements;
+        Map<String, Integer> appropriateIndexes;
+
+        if (isValid(path, delimiter, out, stringOfFilters)) {
+            List<String> listOfFilters = getListOfFilters(stringOfFilters);
             try (var scanner = new Scanner(Paths.get(path)).useDelimiter(LINE_SEPARATOR)) {
-                if (scanner.hasNext() && filters.isPresent()) {
+                if (scanner.hasNext() && !listOfFilters.isEmpty()) {
                     line = scanner.next();
-                    listOfFilters = filters.get();
-                    appropriateIndexes = getAppropriateIndexes(line, delimiter, listOfFilters);
-                    outputInfo = createString(line, delimiter, appropriateIndexes);
+                    listOfLineElements = getListOfLineElements(line, delimiter);
+                    appropriateIndexes = getAppropriateIndexes(listOfLineElements, listOfFilters);
+                    outputInfo = generateOutputString(listOfLineElements, appropriateIndexes, delimiter);
                     writeInfoToDataReceiver(out, outputInfo);
                     while (scanner.hasNext()) {
                         line = scanner.next();
-                        outputInfo = createString(line, delimiter, appropriateIndexes);
+                        listOfLineElements = getListOfLineElements(line, delimiter);
+                        outputInfo = generateOutputString(listOfLineElements, appropriateIndexes, delimiter);
                         writeInfoToDataReceiver(out, outputInfo);
                     }
+                } else {
+                    throw new IllegalArgumentException("Input correct filters!");
                 }
             }
         } else {
@@ -48,33 +55,36 @@ public class CSVReader {
     }
 
     private static boolean isValid(String path, String delimiter, String out, String filter) {
-        return isNotBlank(path) && Paths.get(path).toFile().exists() && isNotBlank(delimiter) && isNotBlank(out) && isNotBlank(filter);
+        return isNotBlank(path) && new File(path).exists()
+                && isNotBlank(delimiter) && isNotBlank(out)
+                && isNotBlank(filter);
     }
 
-    private static Optional<List<String>> getListOfFilters(String stringOfFilters) {
-        return Optional.of(Arrays.stream(stringOfFilters.split(FILTER_DELIMITER)).toList());
+    private static List<String> getListOfFilters(String stringOfFilters) {
+        return Arrays.stream(stringOfFilters.split(FILTER_DELIMITER)).toList();
     }
 
-    private static List<Integer> getAppropriateIndexes(String line, String delimiter, List<String> filters) {
-        List<String> tableElements = Arrays.asList(line.split(delimiter));
-        List<Integer> indexesOfAppropriateElements = new ArrayList<>();
-        for (String filter : filters) {
-            indexesOfAppropriateElements.add(tableElements.indexOf(filter));
-        }
-        return indexesOfAppropriateElements;
+    private static Map<String, Integer> getAppropriateIndexes(List<String> lineElements, List<String> filters) {
+        return lineElements.size() >= filters.size() ? filters.stream()
+                .collect(Collectors.toMap(Function.identity(), lineElements::indexOf)) : Map.of();
     }
 
-    private static String createString(String line, String delimiter, List<Integer> indexes) {
-        List<String> tableElements = Arrays.asList(line.split(delimiter));
+    private static String generateOutputString(List<String> lineElements, Map<String, Integer> indexes, String delimiter) {
         StringBuilder outputString = new StringBuilder();
-        if (tableElements.size() >= indexes.size()) {
-            for (Integer index : indexes) {
-                outputString.append(tableElements.get(index)).append(delimiter);
+        if (lineElements.size() >= indexes.size()) {
+            for (Map.Entry<String, Integer> entry : indexes.entrySet()) {
+                outputString.append(lineElements.get(entry.getValue())).append(delimiter);
             }
             outputString.deleteCharAt(outputString.length() - 1);
             outputString.append(LINE_SEPARATOR);
+        } else {
+            throw new IllegalArgumentException("The CSV file is incorrect");
         }
         return outputString.toString();
+    }
+
+    private static List<String> getListOfLineElements(String line, String delimiter) {
+        return Arrays.asList(line.split(delimiter));
     }
 
     private static void writeInfoToDataReceiver(String out, String info) {

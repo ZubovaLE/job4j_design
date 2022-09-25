@@ -27,5 +27,11 @@ public class UsageLog4j {
         LOG.debug("User's id : {}", id);
         LOG.debug("User's height : {} and weight {}", height, weight);
         LOG.debug("Is User married?: {}, User's category: {}", married, category);
+        try {
+            throw new Exception("Not supported code");
+        } catch (Exception e) {
+            LOG.error("Exception in log example", e);
+        }
     }
+
 }

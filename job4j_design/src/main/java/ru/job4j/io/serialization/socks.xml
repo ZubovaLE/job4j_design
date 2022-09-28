@@ -1,0 +1,9 @@
+<?xml version="1.1" encoding="UTF-8" ?>
+<socks isUniSex="true" cotton="89.9f" color="red">
+    <contact phone="123-456"/>
+    <characteristics>
+        <characteristic>Socks</characteristic>
+        <characteristic>made of cotton</characteristic>
+        <characteristic>demi-season</characteristic>
+    </characteristics>
+</socks>

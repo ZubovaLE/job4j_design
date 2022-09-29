@@ -11,7 +11,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class Zip {
-    public static final int ARGS_COUNT = 3;
+    public static final int VALID_NUMBER_OF_ARGS = 3;
     private String directory;
     private String exclude;
     private String output;
@@ -43,16 +43,16 @@ public class Zip {
         }
     }
 
-    private boolean isValid(String[] args) {
-        if (args.length != ARGS_COUNT) {
-            throw new IllegalArgumentException();
+    private boolean isValid(String[] args) throws IllegalArgumentException{
+        if (args.length != VALID_NUMBER_OF_ARGS) {
+            throw new IllegalArgumentException("Invalid number of arguments");
         }
         ArgsName names = ArgsName.of(args);
         directory = names.get("d");
         exclude = names.get("e");
         output = names.get("o");
-        if (isBlank(directory) && isBlank(exclude) || isBlank(output)) {
-            throw new IllegalArgumentException();
+        if (isBlank(directory) || isBlank(exclude) || isBlank(output)) {
+            throw new IllegalArgumentException("Incorrect arguments");
         }
         File source = new File(directory);
         if (!source.exists()) {

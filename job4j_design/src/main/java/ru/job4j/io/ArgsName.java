@@ -1,9 +1,9 @@
 package ru.job4j.io;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
 
 public class ArgsName {
     private final Map<String, String> values = new HashMap<>();
@@ -16,7 +16,7 @@ public class ArgsName {
         int position;
         for (String pair : args) {
             if (!isValid(pair)) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Incorrect arguments");
             }
             position = pair.indexOf("=");
             values.put(pair.substring(1, position), pair.substring(position + 1));
@@ -24,7 +24,7 @@ public class ArgsName {
     }
 
     private static boolean isValid(String line) {
-        return !StringUtils.isBlank(line) && line.contains("=") && line.startsWith("-")
+        return isNotBlank(line) && line.contains("=") && line.startsWith("-")
                 && line.indexOf("=") != 0 && line.indexOf("=") != line.length() - 1;
     }
 

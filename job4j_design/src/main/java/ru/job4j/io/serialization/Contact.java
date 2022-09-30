@@ -1,9 +1,16 @@
 package ru.job4j.io.serialization;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.*;
 
+@XmlRootElement(name = "contact")
 public class Contact implements Serializable {
-    private final String phone;
+    @XmlAttribute
+    private String phone;
+
+    public Contact() {
+    }
 
     public Contact(String phone) {
         this.phone = phone;

@@ -19,6 +19,26 @@ public class Socks {
     private Contact contact;
     private String[] characteristics;
 
+    public boolean isUniSex() {
+        return isUniSex;
+    }
+
+    public float getCotton() {
+        return cotton;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public Contact getContact() {
+        return contact;
+    }
+
+    public String[] getCharacteristics() {
+        return characteristics;
+    }
+
     public Socks() {
     }
 

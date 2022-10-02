@@ -1,11 +1,16 @@
 package ru.job4j.io.serialization;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.*;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @XmlRootElement(name = "person")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -28,6 +33,22 @@ public class Person {
         this.statuses = statuses;
     }
 
+    public boolean isSex() {
+        return sex;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public Contact getContact() {
+        return contact;
+    }
+
+    public String[] getStatuses() {
+        return statuses;
+    }
+
     @Override
     public String toString() {
         return "Person{"
@@ -39,12 +60,12 @@ public class Person {
     }
 
     public static void main(String[] args) throws JAXBException {
-        final Person person = new Person(false, 30, new Contact("11-111"), "Worker", "Married");
+        final Person personOne = new Person(false, 30, new Contact("11-111"), "Worker", "Married");
         JAXBContext context = JAXBContext.newInstance(Person.class);
         Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         try (StringWriter writer = new StringWriter()) {
-            marshaller.marshal(person, writer);
+            marshaller.marshal(personOne, writer);
             String result = writer.getBuffer().toString();
             System.out.println(result);
         } catch (Exception e) {

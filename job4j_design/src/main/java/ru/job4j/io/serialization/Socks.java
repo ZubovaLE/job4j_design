@@ -10,7 +10,7 @@ import java.util.Arrays;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Socks {
     @XmlAttribute
-    private boolean isUniSex;
+    private boolean uniSex;
     @XmlAttribute
     private float cotton;
     @XmlAttribute
@@ -20,7 +20,7 @@ public class Socks {
     private String[] characteristics;
 
     public boolean isUniSex() {
-        return isUniSex;
+        return uniSex;
     }
 
     public float getCotton() {
@@ -42,8 +42,8 @@ public class Socks {
     public Socks() {
     }
 
-    public Socks(boolean isUniSex, float cotton, String color, Contact contact, String... characteristics) {
-        this.isUniSex = isUniSex;
+    public Socks(boolean uniSex, float cotton, String color, Contact contact, String... characteristics) {
+        this.uniSex = uniSex;
         this.cotton = cotton;
         this.color = color;
         this.contact = contact;
@@ -52,7 +52,7 @@ public class Socks {
 
     @Override
     public String toString() {
-        return "Socks{" + "isAvailable=" + isUniSex
+        return "Socks{" + "uniSex=" + uniSex
                 + ", count=" + cotton
                 + ", color='" + color + '\''
                 + ", contact=" + contact

@@ -1,16 +1,11 @@
 package ru.job4j.io.serialization;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.*;
 import java.io.StringWriter;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @XmlRootElement(name = "person")
 @XmlAccessorType(XmlAccessType.FIELD)

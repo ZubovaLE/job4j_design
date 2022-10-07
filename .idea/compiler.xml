@@ -6,7 +6,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="job4j_design" />
         <module name="firstProject" />
+        <module name="job4j_design (1) (ru.job4j)" />
       </profile>
     </annotationProcessing>
   </component>

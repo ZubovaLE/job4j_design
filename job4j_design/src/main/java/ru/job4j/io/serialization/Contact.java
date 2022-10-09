@@ -3,6 +3,7 @@ package ru.job4j.io.serialization;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.*;
+import java.util.Objects;
 
 @XmlRootElement(name = "contact")
 public class Contact implements Serializable {
@@ -25,6 +26,19 @@ public class Contact implements Serializable {
         return "Contact{"
                 + "phone='" + phone + '\''
                 + '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Contact contact = (Contact) o;
+        return Objects.equals(phone, contact.phone);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(phone);
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {

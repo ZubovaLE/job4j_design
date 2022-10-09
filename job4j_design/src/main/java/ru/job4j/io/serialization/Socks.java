@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Arrays;
+import java.util.Objects;
 
 @XmlRootElement(name = "socks")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -58,5 +59,20 @@ public class Socks {
                 + ", contact=" + contact
                 + ", characteristics=" + Arrays.toString(characteristics)
                 + '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Socks socks = (Socks) o;
+        return uniSex == socks.uniSex && Float.compare(socks.cotton, cotton) == 0 && Objects.equals(color, socks.color) && Objects.equals(contact, socks.contact) && Arrays.equals(characteristics, socks.characteristics);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(uniSex, cotton, color, contact);
+        result = 31 * result + Arrays.hashCode(characteristics);
+        return result;
     }
 }

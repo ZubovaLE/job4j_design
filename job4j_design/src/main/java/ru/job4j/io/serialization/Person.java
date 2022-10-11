@@ -6,6 +6,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.*;
 import java.io.StringWriter;
 import java.util.Arrays;
+import java.util.Objects;
 
 @XmlRootElement(name = "person")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -54,17 +55,18 @@ public class Person {
                 + '}';
     }
 
-    public static void main(String[] args) throws JAXBException {
-        final Person personOne = new Person(false, 30, new Contact("11-111"), "Worker", "Married");
-        JAXBContext context = JAXBContext.newInstance(Person.class);
-        Marshaller marshaller = context.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        try (StringWriter writer = new StringWriter()) {
-            marshaller.marshal(personOne, writer);
-            String result = writer.getBuffer().toString();
-            System.out.println(result);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return sex == person.sex && age == person.age && Objects.equals(contact, person.contact) && Arrays.equals(statuses, person.statuses);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(sex, age, contact);
+        result = 31 * result + Arrays.hashCode(statuses);
+        return result;
     }
 }

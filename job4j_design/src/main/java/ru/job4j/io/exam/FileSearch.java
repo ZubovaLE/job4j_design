@@ -1,6 +1,6 @@
 package ru.job4j.io.exam;
 
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import ru.job4j.io.ArgsName;
 
@@ -29,30 +29,38 @@ public class FileSearch {
             try (FileWriter out = new FileWriter(target)) {
                 out.write(finder.getFilePath());
             }
-            System.out.println(finder.getFilePath());
-        } else {
-            throw new IllegalArgumentException("Incorrect arguments");
         }
     }
 
     private static boolean isArgumentsValid(String directory, String searchType, String fileName, String target) {
+        if (isBlank(fileName)) {
+            throw new IllegalArgumentException("No argument with file name");
+        } else if (isBlank(target)) {
+            throw new IllegalArgumentException("No argument with target file name");
+        }
         return isDirectoryValid(directory)
-                && isSearchTypeValid(searchType)
-                && isNotBlank(fileName)
-                && isNotBlank(target);
+                && isSearchTypeValid(searchType);
     }
 
     private static boolean isDirectoryValid(String directory) {
-        return isNotBlank(directory) && new File(directory).exists()
-                && new File(directory).isDirectory();
+        if (isBlank(directory)) {
+            throw new IllegalArgumentException("No argument with directory");
+        }
+        File dir = new File(directory);
+        if (!dir.exists()) {
+            throw new IllegalArgumentException("Directory does not exist");
+        } else if (!dir.isDirectory()) {
+            throw new IllegalArgumentException("It is not a directory");
+        }
+        return true;
     }
 
     private static boolean isSearchTypeValid(String searchType) {
-        return isNotBlank(searchType) && SEARCH_TYPES.contains(searchType);
-    }
-
-    public static void main(String[] args) throws IOException {
-        ArgsName argsname = ArgsName.of(args);
-        searchFile(argsname);
+        if (isBlank(searchType)) {
+            throw new IllegalArgumentException("No argument with search type");
+        } else if (!SEARCH_TYPES.contains(searchType)) {
+            throw new IllegalArgumentException("Invalid searchType");
+        }
+        return true;
     }
 }

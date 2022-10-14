@@ -17,8 +17,19 @@ public class Search {
     }
 
     public static List<Path> search(Path root, Predicate<Path> condition) throws IOException {
-        SearchFiles searcher = new SearchFiles(condition);
-        Files.walkFileTree(root, searcher);
-        return searcher.getPaths();
+        if(isRootValid(root)) {
+            SearchFiles searcher = new SearchFiles(condition);
+            Files.walkFileTree(root, searcher);
+            return searcher.getPaths();
+        } else {
+            throw new IllegalArgumentException("Invalid root");
+        }
+
+    }
+
+    private static boolean isRootValid(Path root) {
+        return (root != null
+                && root.toFile().exists()
+                && root.toFile().isDirectory());
     }
 }

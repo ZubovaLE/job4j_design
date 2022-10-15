@@ -3,7 +3,6 @@ package ru.job4j.io;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.IOException;
@@ -34,11 +33,8 @@ class SearchTest {
         condition = p -> p.toFile().getName().endsWith(".txt");
     }
 
-    private static Stream<Arguments> provideParametrizedTestArguments() {
-        String fileName = firstFile.getFileName().toString();
-        return Stream.of(
-                Arguments.of(fileName)
-        );
+    private static Stream<Path> provideParametrizedTestArguments() {
+        return Stream.of(null, firstFile);
     }
 
     @Test

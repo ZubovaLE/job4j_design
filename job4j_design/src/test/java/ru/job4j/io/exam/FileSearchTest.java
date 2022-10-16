@@ -29,20 +29,6 @@ class FileSearchTest {
         outputFile = Files.createTempFile(directory, "outputFile", ".txt");
     }
 
-    private static Stream<Arguments> provideParametrizedTestArguments() {
-        String directoryPath = directory.toFile().getAbsolutePath();
-        String fileName = file.getFileName().toString();
-        return Stream.of(
-                Arguments.of("-dir=di", "-n=" + fileName, "-t=name", "-o=out.txt", "No argument with directory"),
-                Arguments.of("-d=" + directoryPath, "-name=fileName", "-t=name", "-o=out.txt", "No argument with file name"),
-                Arguments.of("-d=" + directoryPath, "-n=" + fileName, "-type=name", "-o=out.txt", "No argument with search type"),
-                Arguments.of("-d=" + directoryPath, "-n=" + fileName, "-t=name", "-out=out.txt", "No argument with target file name"),
-                Arguments.of("-d=" + file, "-n=" + fileName, "-t=name", "-o=out.txt", "It is not a directory"),
-                Arguments.of("-d=nonExistentDirectory", "-n=" + fileName, "-t=name", "-o=out.txt", "Directory does not exist"),
-                Arguments.of("-d=" + directoryPath, "-n=" + fileName, "-t=type", "-o=out.txt", "Invalid searchType")
-        );
-    }
-
     @ParameterizedTest
     @MethodSource("provideParametrizedTestArguments")
     @DisplayName("When invalid arguments then get IllegalArgumentException")
@@ -69,5 +55,19 @@ class FileSearchTest {
         FileSearch.searchFile(ArgsName.of(args));
         String expected = file.toFile().getAbsolutePath();
         assertThat(Files.readString(outputFile)).isEqualTo(expected);
+    }
+
+    private static Stream<Arguments> provideParametrizedTestArguments() {
+        String directoryPath = directory.toFile().getAbsolutePath();
+        String fileName = file.getFileName().toString();
+        return Stream.of(
+                Arguments.of("-dir=di", "-n=" + fileName, "-t=name", "-o=out.txt", "No argument with directory"),
+                Arguments.of("-d=" + directoryPath, "-name=fileName", "-t=name", "-o=out.txt", "No argument with file name"),
+                Arguments.of("-d=" + directoryPath, "-n=" + fileName, "-type=name", "-o=out.txt", "No argument with search type"),
+                Arguments.of("-d=" + directoryPath, "-n=" + fileName, "-t=name", "-out=out.txt", "No argument with target file name"),
+                Arguments.of("-d=" + file, "-n=" + fileName, "-t=name", "-o=out.txt", "It is not a directory"),
+                Arguments.of("-d=nonExistentDirectory", "-n=" + fileName, "-t=name", "-o=out.txt", "Directory does not exist"),
+                Arguments.of("-d=" + directoryPath, "-n=" + fileName, "-t=type", "-o=out.txt", "Invalid searchType")
+        );
     }
 }

@@ -4,13 +4,26 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class Main {
+    private static final Gson gson = new GsonBuilder().create();
+
+    public static String getJsonString(Object object) {
+        return gson.toJson(object);
+    }
+
+    public static Person getPersonFromJsonString(String jsonString) {
+        return gson.fromJson(jsonString, Person.class);
+    }
+
+    public static Socks getSocksFromJsonString(String jsonString) {
+        return gson.fromJson(jsonString, Socks.class);
+    }
+
     public static void main(String[] args) {
         final Person person = new Person(false, 30, new Contact("11-111"), "Worker", "Married");
         final Socks redSocks = new Socks(true, 89.9f, "red", new Contact("123-456"), "Socks", "made of cotton", "demi-season");
-        final Gson gson = new GsonBuilder().create();
 
         System.out.println("Convert a person object to a json string:");
-        System.out.println(gson.toJson(person));
+        System.out.println(getJsonString(person));
 
         System.out.println("Modify json-string:");
         final String personJson =
@@ -24,12 +37,12 @@ public class Main {
                         + "\"statuses\":"
                         + "[\"Student\",\"Free\"]"
                         + "}";
-        final Person personMod = gson.fromJson(personJson, Person.class);
+        final Person personMod = getPersonFromJsonString(personJson);
         System.out.println(personMod);
         System.out.println();
 
         System.out.println("Convert socks object to a json string:");
-        System.out.println(gson.toJson(redSocks));
+        System.out.println(getJsonString(redSocks));
 
         System.out.println("Modify json-string:");
         String socksJson = "{\"uniSex\":true, "
@@ -42,7 +55,7 @@ public class Main {
                 + "\"characteristics\":"
                 + "[\"Socks\",\"made of cotton\",\"demi-season\"]"
                 + "}";
-        final Socks socksMod = gson.fromJson(socksJson, Socks.class);
+        final Socks socksMod = getSocksFromJsonString(socksJson);
         System.out.println(socksMod);
     }
 }

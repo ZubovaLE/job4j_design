@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="CheckStyle-IDEA">
-    <option name="configuration">
-      <map>
-        <entry key="active-configuration" value="LOCAL_FILE:$PROJECT_DIR$/checkstyle.xml:MyCheck" />
-        <entry key="checkstyle-version" value="9.3" />
-        <entry key="copy-libs" value="true" />
-        <entry key="location-0" value="BUNDLED:(bundled):Sun Checks" />
-        <entry key="location-1" value="BUNDLED:(bundled):Google Checks" />
-        <entry key="location-2" value="LOCAL_FILE:$PROJECT_DIR$/checkstyle.xml:MyCheck" />
-        <entry key="scan-before-checkin" value="false" />
-        <entry key="scanscope" value="Everything" />
-        <entry key="suppress-errors" value="true" />
-      </map>
+  <component name="CheckStyle-IDEA" serialisationVersion="2">
+    <checkstyleVersion>9.3</checkstyleVersion>
+    <scanScope>Everything</scanScope>
+    <suppressErrors>true</suppressErrors>
+    <copyLibs>true</copyLibs>
+    <option name="thirdPartyClasspath" />
+    <option name="activeLocationIds">
+      <option value="2a900140-7dbf-47d9-989c-ea79bdff0b94" />
+    </option>
+    <option name="locations">
+      <list>
+        <ConfigurationLocation id="bundled-sun-checks" type="BUNDLED" scope="All" description="Sun Checks">(bundled)</ConfigurationLocation>
+        <ConfigurationLocation id="bundled-google-checks" type="BUNDLED" scope="All" description="Google Checks">(bundled)</ConfigurationLocation>
+        <ConfigurationLocation id="2a900140-7dbf-47d9-989c-ea79bdff0b94" type="LOCAL_FILE" scope="All" description="MyCheck">$PROJECT_DIR$/checkstyle.xml</ConfigurationLocation>
+      </list>
     </option>
   </component>
 </project>

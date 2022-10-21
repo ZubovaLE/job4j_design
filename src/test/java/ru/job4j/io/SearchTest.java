@@ -1,13 +1,16 @@
 package ru.job4j.io;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -33,11 +36,8 @@ class SearchTest {
         condition = p -> p.toFile().getName().endsWith(".txt");
     }
 
-    private static Stream<Path> provideParametrizedTestArguments() {
-        return Stream.of(null, firstFile);
-    }
-
     @Test
+    @DisplayName("Try to find files with .txt")
     void testSearch() throws IOException {
         Predicate<Path> condition = p -> p.toFile().getName().endsWith(".txt");
         List<Path> result = Search.search(root, condition);
@@ -48,7 +48,16 @@ class SearchTest {
 
     @ParameterizedTest
     @MethodSource("provideParametrizedTestArguments")
-    void testSearchWhenRootIsNotDirectoryThenGetException(Path dir) {
-        assertThatIllegalArgumentException().isThrownBy(() -> Search.search(dir, condition)).withMessage("Invalid root");
+    @DisplayName("Test search when invalid root then get IllegalArgumentException")
+    void testSearchWhenInvalidRootThenGetException(Path root, String message) {
+        assertThatIllegalArgumentException().isThrownBy(() -> Search.search(root, condition)).withMessage(message);
+    }
+
+    private static Stream<Arguments> provideParametrizedTestArguments() {
+        return Stream.of(
+                Arguments.of(null, "Root was not found"),
+                Arguments.of(Paths.get("does not exist"), "Root does not exist"),
+                Arguments.of(firstFile, "Root is not a directory")
+        );
     }
 }

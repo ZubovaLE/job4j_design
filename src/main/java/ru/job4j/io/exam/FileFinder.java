@@ -34,12 +34,11 @@ public class FileFinder extends SimpleFileVisitor<Path> {
     @Override
     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
         if (searchType.equals(SEARCH_TYPE_IS_MASK)) {
-            try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(
-                    dir, desiredFIle)) {
+            try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(dir, desiredFIle)) {
                 Iterator<Path> iterator = directoryStream.iterator();
                 if (iterator.hasNext()) {
                     filePath = iterator.next().toFile().getAbsolutePath();
-                    return FileVisitResult.SKIP_SIBLINGS;
+                    return FileVisitResult.TERMINATE;
                 }
             }
         }
@@ -51,7 +50,7 @@ public class FileFinder extends SimpleFileVisitor<Path> {
         if ((searchType.equals(SEARCH_TYPE_IS_NAME) && file.toFile().getName().equals(desiredFIle))
                 || (searchType.equals(SEARCH_TYPE_IS_REGEX) && getFilePathByRegex(file.toFile().getName()))) {
             filePath = file.toFile().getAbsolutePath();
-            return FileVisitResult.SKIP_SIBLINGS;
+            return FileVisitResult.TERMINATE;
         }
         return super.visitFile(file, attrs);
     }

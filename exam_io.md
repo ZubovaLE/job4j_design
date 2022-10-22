@@ -2,7 +2,7 @@
 
 ## Оглавление
 
-1. [Что такое поток ввода-вывода?](#1-Что-такое-поток-вводавывода)
+1. [Что такое поток ввода-вывода?](#1-Что-такое-поток-ввода--вывода)
 2. [Что такое Java IO?](#2-Что-такое-Java-IO)
 3. [Что такое Java NIO?](#3-Что-такое-Java-NIO)
 4. [Что такое Scanner?](#4-Что-такое-Scanner)
@@ -192,7 +192,8 @@ ObjectInputStream. ObjectOutputStream используется для конве
 Каталог является объектом типа File, содержащим список других файлов и каталогов. С помощью метода list() у такого
 объекта можно извлечь список других находящихся в нём файлов и каталогов (массив объектов типа String).
 
-Также можно вернуть массив объектов типа File с помощью метода listFiles().
+Также можно вернуть массив объектов типа File с помощью метода listFiles().  
+Но нужно учитывать, что данные списки не включает в себя файлы из поддиректорий.
 
 ``` java
 File file = new File("directory");
@@ -211,16 +212,24 @@ File[] filesArr = file.listFiles();
 
 ## 18 Как удалить файл?
 
-С помощью метода delete():
++ С помощью метода delete() из класса File:
 
 ``` java
 File file = new File("dir");
 boolean isDelete = file.delete();
 ```
 
++ С помощью метода delete() из класса Files:
+``` java
+Path filePath = Paths.get("c:/test.txt");
+Files.delete(Path path);
+```
+
 [К оглавлению &#8593;](#Оглавление)
 
 ## 19 Как переместить файл?
+
+Files.move(Path source, Path target, CopyOption... option);
 
 [К оглавлению &#8593;](#Оглавление)
 
@@ -235,21 +244,110 @@ boolean isDelete = file.delete();
 ## 22 Как создать директорию?
 
 Каталог является объектом типа File, содержащим список других файлов и каталогов.
+
 [К оглавлению &#8593;](#Оглавление)
 
 ## 23 Как записать в файл?
 
+Есть разные варианты:
++ с помощью потока FileOutputStream
++ с помощью потока BufferedOutputStream
++ с помощью PrintWriter
++ с помощью FileWriter
++ с помощью BufferedWriter
+
+```java
+        try (BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
+            out.write(thirdData.getBytes());
+        }
+```
+
+```java
+        try (FileWriter fw = new FileWriter(file, true)) {
+            for (String line : log) {
+                fw.write(line + System.lineSeparator());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+```
 [К оглавлению &#8593;](#Оглавление)
 
 ## 24 Как прочитать данные из файла?
+
+Есть разные варианты:
++ с помощью потока FileInputStream
++ с помощью Scanner
++ с помощью FileReader
++ с помощью BufferedReader
++ Files.readAllBytes(Path path);
++ Files.readAllLines(Path path);
++ и другие методы из класса Files
+
++ FileInputStream
+
+```java
+    try (FileInputStream in = new FileInputStream("test.txt")) {
+        StringBuilder text = new StringBuilder();
+        int read;
+        while ((read = in.read()) != -1) {
+        text.append((char) read);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+}
+           
+```
+
++ FileReader
+
+```java
+        try (FileReader fr = new FileReader("C:\\test.txt")) {
+            int i;
+            while ((i = fr.read()) != -1){
+                System.out.print((char) i);
+            }
+        } catch (Exception e) {
+        e.printStackTrace();
+        }
+```
+
++ Scanner
+
+```java
+        try (Scanner scanner = new Scanner(file).useDelimiter(System.lineSeparator())){
+            while(scanner.hasNext()) {
+                System.out.println(secondScanner.next());
+            }
+        }
+```
+
++ BufferedReader
+
+```java
+    try (BufferedReader in = new BufferedReader(new FileReader("test.txt"))) {
+        in.lines().forEach(System.out::println);
+    } catch (Exception e) {
+    e.printStackTrace();
+    }
+```
+
+```java
+ byte[] data = Files.readAllBytes(Paths.get(fileName));
+```
 
 [К оглавлению &#8593;](#Оглавление)
 
 ## 25 Что такое сокет?
 
+Сокет - это один из концов двустороннего канала связи между двумя программами. Он представляет собой комбинацию
+IP-адреса и номер порта.
+
 [К оглавлению &#8593;](#Оглавление)
 
 ## 26 Какие виды сокетов есть в Java? С каким протоколом они работают?
+
+Есть два вида сокетов: _серверный_ и _клиентский_. Они работают с протоколом TCP
 
 [К оглавлению &#8593;](#Оглавление)
 

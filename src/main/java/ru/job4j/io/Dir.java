@@ -30,8 +30,11 @@ public class Dir extends SimpleFileVisitor<Path> {
     }
 
     private static boolean isDirectoryValid(File file) {
+        if (!file.exists()) {
+            throw new IllegalArgumentException(String.format("Directory does not exist %s", file.getAbsolutePath()));
+        }
         if (!file.isDirectory()) {
-            throw new IllegalArgumentException(String.format("Not directory %s", file.getAbsoluteFile()));
+            throw new IllegalArgumentException(String.format("Not directory %s", file.getAbsolutePath()));
         }
         return true;
     }

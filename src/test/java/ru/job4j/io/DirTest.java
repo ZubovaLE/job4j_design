@@ -3,11 +3,18 @@ package ru.job4j.io;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 import static org.assertj.core.api.Assertions.*;
@@ -33,7 +40,7 @@ class DirTest {
 
     @Test
     @DisplayName("Test getContentOfDirectory when valid root")
-    void getContentOfDirectory() throws IOException {
+    void testGetContentOfDirectoryWhenValidRoot() throws IOException {
         List<String> result = Dir.getContentOfDirectory(new String[]{root.toFile().getAbsolutePath()});
         String expectedOne = String.format("%s is a directory:  total size = %d bytes, number of inner directories = 1, number of inner files = 3",
                 innerDirectory.toFile().getName(), secondFile.toFile().length() + thirdFile.toFile().length() + fourthFile.toFile().length());
@@ -41,5 +48,22 @@ class DirTest {
         assertThat(result).hasSize(2);
         assertThat(result).contains(expectedOne);
         assertThat(result).contains(expectedTwo);
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideParametrizedTestArguments")
+    @DisplayName("Test getContentOfDirectory when invalid root then get IllegalArgumentException")
+    void testGetContentOfDirectoryWhenInvalidRootThenGetException(String root, String message) {
+        assertThatIllegalArgumentException().isThrownBy(() -> Dir.getContentOfDirectory(new String[]{root}))
+                .withMessage(message);
+    }
+
+    private static Stream<Arguments> provideParametrizedTestArguments() {
+        String firstFilePath = firstFile.toFile().getAbsolutePath();
+        String fileThatDoesNotExist = "does not exist";
+        return Stream.of(
+                Arguments.of(firstFilePath, String.format("Not directory %s", firstFilePath)),
+                Arguments.of(fileThatDoesNotExist, String.format("Directory does not exist %s", new File(fileThatDoesNotExist).getAbsolutePath()))
+        );
     }
 }

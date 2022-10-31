@@ -1,33 +1,22 @@
-create table subjects(
+create table books(
 	id serial primary key,
 	name varchar(255)
 );
 
-create table pupils(
+create table readers(
 	id serial primary key,
 	name varchar(255)
 );
 
-create table grades(
+create table readers_books(
 	id serial primary key,
-	symbol character(1),
-	description varchar(255)
+	reader_id int references readers(id),
+	book_id int references books(id)
 );
 
-create table pupils_grades(
-	id serial primary key,
-	pupil int references pupils (id),
-	subject int references subjects (id),
-	grade int references grades (id) 
-);
+insert into books (name) values ('Name 1'), ('Name 2'), ('Name 3'), ('Name 4'), ('Name 5');
+insert into readers (name) values ('Alex'), ('Emily'), ('John'), ('Kate'), ('Peter');
+insert into readers_books (reader_id, book_id) values (1, 2), (1, 4), (2, 1), (2, 3), (2, 5), 
+(3, 2), (4, 2), (4, 5), (5, 1);
 
-insert into subjects (name) values ('Maths'), ('Chemistry'), ('History');
-insert into grades (symbol, description) values ('E', 'Excellent'), ('S', 'Satisfactory'), 
-('N', 'Needs improvement'), ('U', 'Unsatisfactory');
-insert into pupils (name) values ('Alex'), ('Chloe'), ('Emily'), ('John');
-insert into pupils_grades (pupil, subject, grade) values (1, 1, 1), (1, 2, 1), (1, 3, 2),
-(2, 1, 3), (2, 2, 2), (2, 3, 3),
-(3, 1, 1), (3, 2, 1), (3, 3, 1),
-(4, 1, 4), (4, 2, 3), (4, 3, 4);
-
-select * from pupils_grades;
+select * from readers_books;

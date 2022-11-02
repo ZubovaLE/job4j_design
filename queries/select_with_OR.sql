@@ -1,0 +1,1 @@
+select * from students where name like 'E%' or enroll_date > '09.09.2019';

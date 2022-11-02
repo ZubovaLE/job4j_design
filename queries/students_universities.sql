@@ -32,5 +32,3 @@ values ('AB', 1, true, 'S1', date '2020-09-01', 1), ('AC', 2, true, 'S1', date '
 ('EF', 1, true, 'P5', date '2020-09-01', 5), ('EG', 2, true, 'O5', date '2019-09-01', 5),
 ('EH', 3, false, 'I5', date '2018-09-01', 5), ('EJ', 4, true, 'J5', date '2017-09-01', 5),
 ('EI', 5, true, 'K5', date '2016-09-01', 5);
-
-select * from students where enroll_date > '01.01.2017'; 

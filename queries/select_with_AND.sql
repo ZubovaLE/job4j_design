@@ -1,0 +1,1 @@
+select * from students where name like 'D%' and course > 2;

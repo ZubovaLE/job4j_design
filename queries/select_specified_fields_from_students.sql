@@ -1,0 +1,1 @@
+select name, course, speciality from students;

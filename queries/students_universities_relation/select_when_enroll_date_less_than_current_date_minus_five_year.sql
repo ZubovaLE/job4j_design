@@ -1,0 +1,1 @@
+select * from students where enroll_date < (select current_date - interval '5 year');

@@ -1,0 +1,1 @@
+SELECT * FROM products WHERE expired_date < (select current_date);

@@ -2,7 +2,7 @@ create table members(
 	id serial primary key,
 	name varchar,
 	age integer,
-	isMarried bool,
+	isMarried boolean,
 	address text
 );
 insert into members(name, age, isMarried, address) values ('Alex', 30, FALSE, '5 Big street');

@@ -1,0 +1,1 @@
+SELECT * FROM employees e RIGHT JOIN departments d on e.department_id = d.id;

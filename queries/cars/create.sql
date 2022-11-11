@@ -1,0 +1,22 @@
+CREATE TABLE cars(
+	id SERIAL PRIMARY KEY,
+	name VARCHAR(255)
+);
+
+CREATE TABLE bodies(
+	id SERIAL PRIMARY KEY,
+	name VARCHAR(255),
+	car_id INTEGER REFERENCES cars(id)
+);
+
+CREATE TABLE engines(
+	id SERIAL PRIMARY KEY,
+	name VARCHAR(255),
+	car_id INTEGER REFERENCES cars(id)
+);
+
+CREATE TABLE transmissions(
+	id SERIAL PRIMARY KEY,
+	name VARCHAR(255),
+	car_id INTEGER REFERENCES cars(id)
+);

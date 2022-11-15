@@ -1,7 +1,6 @@
 package ru.job4j.jdbc;
 
-import ru.job4j.io.Config;
-
+import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -11,35 +10,33 @@ import java.util.StringJoiner;
 
 public class TableEditor implements AutoCloseable {
     private Connection connection;
-    private Properties properties;
 
-    private Connection getConnection(String propertiesPath) throws Exception {
-        Config config = new Config(propertiesPath);
-        config.load();
-        Class.forName(config.value("hibernate.connection.driver_class"));
-        String url = config.value("hibernate.connection.url");
-        String login = config.value("hibernate.connection.username");
-        String password = config.value("hibernate.connection.password");
-        return DriverManager.getConnection(url, login, password);
-    }
+    private boolean connect() throws IOException, ClassNotFoundException, SQLException {
+        try (InputStream input = TableEditor.class.getClassLoader().getResourceAsStream("app.properties")) {
+            Properties props = new Properties();
+            props.load(input);
+            Class.forName(props.getProperty("driver_class"));
+            this.connection = DriverManager.getConnection(props.getProperty("url"), props.getProperty("username"), props.getProperty("password"));
 
-    private boolean isConnection() {
-        return connection != null;
+        }
+        return this.connection != null;
     }
 
     private void resolveQuery(String query) throws SQLException {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(query);
+            
         }
     }
 
-    public TableEditor(Properties properties) {
-        this.properties = properties;
+    public TableEditor() throws SQLException, IOException, ClassNotFoundException {
         initConnection();
     }
 
-    public void initConnection() {
-        connection = null;
+    public void initConnection() throws SQLException, IOException, ClassNotFoundException {
+        if (!connect()) {
+            throw new IllegalArgumentException();
+        }
     }
 
     public void createTable(String tableName) throws SQLException {
@@ -93,5 +90,10 @@ public class TableEditor implements AutoCloseable {
         if (connection != null) {
             connection.close();
         }
+    }
+
+    public static void main(String[] args) throws IOException, SQLException, ClassNotFoundException {
+        TableEditor table = new TableEditor();
+        table.createTable("test_table");
     }
 }

@@ -13,10 +13,10 @@ public class TableEditor implements AutoCloseable {
 
     private boolean connect() throws IOException, ClassNotFoundException, SQLException {
         try (InputStream input = TableEditor.class.getClassLoader().getResourceAsStream("app.properties")) {
-            Properties props = new Properties();
-            props.load(input);
-            Class.forName(props.getProperty("driver_class"));
-            this.connection = DriverManager.getConnection(props.getProperty("url"), props.getProperty("username"), props.getProperty("password"));
+            Properties properties = new Properties();
+            properties.load(input);
+            Class.forName(properties.getProperty("driver_class"));
+            this.connection = DriverManager.getConnection(properties.getProperty("url"), properties.getProperty("username"), properties.getProperty("password"));
 
         }
         return this.connection != null;
@@ -25,7 +25,6 @@ public class TableEditor implements AutoCloseable {
     private void resolveQuery(String query) throws SQLException {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(query);
-            
         }
     }
 
@@ -41,10 +40,8 @@ public class TableEditor implements AutoCloseable {
 
     public void createTable(String tableName) throws SQLException {
         String sql = String.format(
-                "CREATE TABLE IF NOT EXISTS %s(%s, %s);",
-                tableName,
-                "id SERIAL PRIMARY KEY",
-                "name VARCHAR(255)"
+                "CREATE TABLE IF NOT EXISTS %s();",
+                tableName
         );
         resolveQuery(sql);
     }
@@ -57,13 +54,25 @@ public class TableEditor implements AutoCloseable {
         resolveQuery(sql);
     }
 
-    public void addColumn(String tableName, String columnName, String type) {
+    public void addColumn(String tableName, String columnName, String type) throws SQLException {
+        String sql = String.format(
+                "ALTER TABLE %s%nADD %s %s", tableName, columnName, type
+        );
+        resolveQuery(sql);
     }
 
-    public void dropColumn(String tableName, String columnName) {
+    public void dropColumn(String tableName, String columnName) throws SQLException {
+        String sql = String.format(
+                "ALTER TABLE %s%nDROP COLUMN %s", tableName, columnName
+        );
+        resolveQuery(sql);
     }
 
-    public void renameColumn(String tableName, String columnName, String newColumnName) {
+    public void renameColumn(String tableName, String columnName, String newColumnName) throws SQLException {
+        String sql = String.format(
+                "ALTER TABLE %s%nRENAME COLUMN %s TO %s", tableName, columnName, newColumnName
+        );
+        resolveQuery(sql);
     }
 
     public static String getTableScheme(Connection connection, String tableName) throws Exception {
@@ -90,10 +99,5 @@ public class TableEditor implements AutoCloseable {
         if (connection != null) {
             connection.close();
         }
-    }
-
-    public static void main(String[] args) throws IOException, SQLException, ClassNotFoundException {
-        TableEditor table = new TableEditor();
-        table.createTable("test_table");
     }
 }

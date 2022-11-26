@@ -17,6 +17,7 @@ public class ImportDB {
     private final String dump;
 
     private static final String SEPARATOR = ";";
+
     public ImportDB(Properties cfg, String dump) {
         this.cfg = cfg;
         this.dump = dump;

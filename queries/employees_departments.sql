@@ -19,7 +19,7 @@ SELECT * FROM employees e RIGHT JOIN departments d on e.department_id = d.id;
 SELECT * FROM employees e FULL JOIN departments d on e.department_id = d.id;
 SELECT * FROM employees CROSS JOIN departments ;
 
-SELECT * FROM departments d LEFT JOIN employees e on e.department_id = d.id WHERE e.id IS NULL;
+SELECT * FROM departments d LEFT JOIN employees e on e.department_id = d.id WHERE e.department_id IS NULL;
 
 SELECT * FROM employees e LEFT JOIN departments d on e.department_id = d.id WHERE d.id IS NOT NULL;
 SELECT * FROM employees e RIGHT JOIN departments d on e.department_id = d.id WHERE e.id IS NOT NULL;

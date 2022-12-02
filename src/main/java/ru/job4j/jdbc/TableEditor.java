@@ -11,15 +11,14 @@ import java.util.StringJoiner;
 public class TableEditor implements AutoCloseable {
     private Connection connection;
 
-    private boolean connect() throws IOException, ClassNotFoundException, SQLException {
+    private void connect() throws IOException, ClassNotFoundException, SQLException {
         try (InputStream input = TableEditor.class.getClassLoader().getResourceAsStream("app.properties")) {
             Properties properties = new Properties();
             properties.load(input);
             Class.forName(properties.getProperty("driver_class"));
-            this.connection = DriverManager.getConnection(properties.getProperty("url"), properties.getProperty("username"), properties.getProperty("password"));
-
+            this.connection = DriverManager.getConnection(properties.getProperty("url"),
+                    properties.getProperty("username"), properties.getProperty("password"));
         }
-        return this.connection != null;
     }
 
     private void resolveQuery(String query) throws SQLException {
@@ -28,28 +27,28 @@ public class TableEditor implements AutoCloseable {
         }
     }
 
-    public TableEditor() throws SQLException, IOException, ClassNotFoundException {
+    public TableEditor() {
         initConnection();
     }
 
-    public void initConnection() throws SQLException, IOException, ClassNotFoundException {
-        if (!connect()) {
+    public void initConnection() {
+        try {
+            connect();
+        } catch (IOException | ClassNotFoundException | SQLException e) {
             throw new IllegalArgumentException();
         }
     }
 
     public void createTable(String tableName) throws SQLException {
         String sql = String.format(
-                "CREATE TABLE IF NOT EXISTS %s();",
-                tableName
+                "CREATE TABLE IF NOT EXISTS %s();", tableName
         );
         resolveQuery(sql);
     }
 
     public void dropTable(String tableName) throws SQLException {
         String sql = String.format(
-                "DROP TABLE %s;",
-                tableName
+                "DROP TABLE %s;", tableName
         );
         resolveQuery(sql);
     }

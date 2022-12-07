@@ -15,9 +15,9 @@ public class TableEditor implements AutoCloseable {
         try (InputStream input = TableEditor.class.getClassLoader().getResourceAsStream("app.properties")) {
             Properties properties = new Properties();
             properties.load(input);
-            Class.forName(properties.getProperty("driver_class"));
-            this.connection = DriverManager.getConnection(properties.getProperty("url"),
-                    properties.getProperty("username"), properties.getProperty("password"));
+            Class.forName(properties.getProperty("jdbc.driver"));
+            this.connection = DriverManager.getConnection(properties.getProperty("jdbc.url"),
+                    properties.getProperty("jdbc.username"), properties.getProperty("jdbc.password"));
         }
     }
 
